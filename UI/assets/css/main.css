@@ -19,16 +19,6 @@ body {
     margin: auto;
 }
 
-.header {
-	display:block;
-	margin:auto;
-}
-
-.content {
-	display:block;
-	margin:auto;
-}
-
 .nav {
     background: #0c0c0c;
     text-align: right;
