@@ -478,6 +478,60 @@ input[type=fname]:focus, input[type=lname]:focus, input[type=email]:focus {
     outline: none;
 }
 
+table {
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    font-size: 14px;
+    font-family: helvetica;
+}
+
+.redflags {
+    margin: 50px 0;
+}
+
+.redflags a {
+    text-decoration: none;
+}
+
+.redflags a:hover {
+    text-decoration: none;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.table-bottom {
+    font-weight: 600;
+}
+
+.btn-edit-redflag {
+    background: #5563c1;
+    border-radius: 3px;
+    border: 1px solid #3f4eae;
+    padding: 6px 10px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.btn-delete-redflag {
+    background: #cc0000;
+    border-radius: 3px;
+    border: 1px solid #cc0000;
+    padding: 6px 10px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 500px) {
     .brand {
         margin: 0;
