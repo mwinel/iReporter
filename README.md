@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mwinel/iReporter.svg?branch=develop)](https://travis-ci.org/mwinel/iReporter)  [![Coverage Status](https://coveralls.io/repos/github/mwinel/iReporter/badge.svg?branch=develop)](https://coveralls.io/github/mwinel/iReporter?branch=develop)
+[![Build Status](https://travis-ci.org/mwinel/iReporter.svg?branch=develop)](https://travis-ci.org/mwinel/iReporter)    [![Coverage Status](https://coveralls.io/repos/github/mwinel/iReporter/badge.svg?branch=develop)](https://coveralls.io/github/mwinel/iReporter?branch=develop)
 
 # iReporter
 iReporter enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
