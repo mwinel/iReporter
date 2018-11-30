@@ -7,6 +7,7 @@ install:
  - pip install coveralls
 
 script:
+ - python -m unittest discover 
  - python3 -m pytest --cov
 
 after_success:
