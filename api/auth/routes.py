@@ -7,10 +7,10 @@ from db.database import UsersDb
 users = UsersDb()
 validation = UserValidation()
 
+
 @api.route("/signup", methods=['POST'])
 def signup():
     data = request.get_json()
-
     firstname = data.get('firstname')
     lastname = data.get('lastname')
     othernames = data.get('othernames')
@@ -38,3 +38,17 @@ def signup():
         "status": "User successfully created.",
         "data": user.to_json() 
     }), 201
+
+
+@api.route("/login", methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    current_user = users.find_by_username(username)
+    if not current_user:
+        return jsonify({"error": "User does not exist."}), 200
+    check_credentials = users.user_login(username, password)
+    if check_credentials:
+        return jsonify({"status": "Successfully logged in."}), 200
+    return jsonify({"error": "Invalid Credentials!"}), 400 
