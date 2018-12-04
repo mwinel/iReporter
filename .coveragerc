@@ -9,3 +9,5 @@ omit =
     */usr/lib/python3/*
     */__init__.py
     tests/*
+    db/*
+    */models.py
