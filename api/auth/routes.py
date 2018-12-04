@@ -1,9 +1,11 @@
 from flask import jsonify, request
 from api.auth import api
 from api.auth.models import User, BaseUser
+from api.auth.utilities import UserValidation
 from db.database import UsersDb
 
 users = UsersDb()
+validation = UserValidation()
 
 @api.route("/signup", methods=['POST'])
 def signup():
@@ -18,10 +20,11 @@ def signup():
     phoneNumber = data.get('phoneNumber')
     user = User(BaseUser(firstname, lastname, othernames, phoneNumber),
                 username, email, password)
-    error = user.validate_input()
+    error = validation.validate_user_input(username, email, password)
     if error:
         return jsonify({"error": error}), 400
-    base_error = user.base.validate_base_input()
+    base_error = validation.validate_base_input(firstname, lastname, 
+                                                othernames, phoneNumber)
     if base_error:
         return jsonify({"error": base_error}), 400
     user_exists = users.find_by_username(username)
