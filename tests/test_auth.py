@@ -329,3 +329,7 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(res.status_code, 200)
         message = json.loads(res.data.decode())
         self.assertEqual(message["error"], "User does not exist.")
+
+    def test_get_all_users(self):
+        rv = self.app.get('api/v1/auth/users')
+        self.assertTrue(rv.status_code, 200)   

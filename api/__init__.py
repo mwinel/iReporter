@@ -1,6 +1,9 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = 'you-own-your-own'
+jwt = JWTManager(app)
 
 # Register blueprints
 from api.index import api as index_blueprint
