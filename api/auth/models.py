@@ -3,7 +3,7 @@ import datetime
 
 class BaseUser:
 
-    user_id = 0
+    user_id = 1
 
     def __init__(self, firstname, lastname, othernames, phoneNumber):
         self.firstname = firstname
@@ -24,9 +24,10 @@ class User:
         self.password = password
         self.isAdmin = False
 
+    @property
     def to_json(self):
         return {
-            "id": self.base.user_id,
+            "id": self.base.id,
             "firstname": self.base.firstname,
             "lastname": self.base.lastname,
             "othernames": self.base.othernames,
