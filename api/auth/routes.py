@@ -27,7 +27,7 @@ def login():
             "status": "Successfully logged in.",
             "access_token": access_token
         }), 200
-    return jsonify({"error": "Invalid Credentials!"}), 400
+    return jsonify({"error": "Invalid Credentials!"}), 401
 
 
 @api.route("/users", methods=['GET'])

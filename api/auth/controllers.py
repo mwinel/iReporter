@@ -33,7 +33,7 @@ class UserController:
             return jsonify({
                 "error": "User with username '{}' already exists."
                 .format(username)
-            })
+            }), 202
         users.add_user(user)
         access_token = create_access_token(identity=username)
         return jsonify({
