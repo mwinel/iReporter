@@ -33,5 +33,4 @@ def login():
 @api.route("/users", methods=['GET'])
 @jwt_required
 def fetch_users():
-    current_user = get_jwt_identity()
     return user_controller.get_all_users()     
