@@ -10,4 +10,10 @@ class UsersDb:
         for user in self.users_list:
             if user.username == username:
                 return user
-        return None    
+        return None   
+
+    def check_user(self, username, password):
+        for user in self.users_list:
+            if username == user.username and password == user.password:
+                return user
+            return None

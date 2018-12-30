@@ -4,6 +4,15 @@ from db.database import UsersDb
 
 users = UsersDb()
 
+def find_user(username):
+    user = users.find_by_username(username)
+    return user
+
+def check_login_credentials(username, password):
+        user = users.check_user(username, password)
+        return user
+
+
 class UserController:
 
     def create_user(self):
@@ -35,3 +44,19 @@ class UserController:
             "status": "User successfully created.",
             "data": user.to_json() 
         }), 201
+
+    def user_login(self):
+        data = request.get_json()
+
+        username = data.get('username')
+        password = data.get('password')
+
+        current_user = find_user(username)
+        if not current_user:
+            return jsonify({"error": "User does not exist."}), 200
+        check_credentials = check_login_credentials(username, password)
+        if check_credentials:
+            return jsonify({
+                "status": "Successfully logged in."
+            }), 200
+        return jsonify({"error": "Invalid credentials!"}), 401
