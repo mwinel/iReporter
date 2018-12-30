@@ -27,13 +27,13 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(rv.status_code, 201)                   
 
         user2 = {
-	        "firstname": "moureen",
-	        "lastname": "murungi",
-	        "othernames": "molly",
-	        "username": "more",
-	        "email": "molly@live.com",
-            "password": "123456",
-	        "phoneNumber": "256 781916565"
+            "firstname": "moureen",
+            "lastname": "murungi",
+            "othernames": "molly",
+            "username": "more",
+            "email": "molly@live.com",
+            "password": "654321",
+            "phoneNumber": "256 781916565"
         }
 
         res = self.app.post(
@@ -169,4 +169,65 @@ class TestUserAuth(BaseTestCase):
         )
         self.assertTrue(rv.status_code, 400)
         status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Phone number field cannot be left empty.")                                          
+        self.assertEqual(status["error"], "Phone number field cannot be left empty.")
+
+    def test_user_login(self):
+        """Test registered user can successfully login."""
+
+        rv = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        self.assertTrue(rv.status_code, 201)
+
+        res = self.app.post(
+            'api/v1/auth/login',
+            content_type='application/json',
+            data=json.dumps(self.login_user)
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 200)
+        self.assertEqual(result["status"], "Successfully logged in.")
+
+    def test_user_login_with_invalid_credentials(self):
+        """Test user cannot login with invalid credentials."""
+
+        rv = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        self.assertTrue(rv.status_code, 201)
+
+        self.login_user["password"] = "123456"
+
+        res = self.app.post(
+            'api/v1/auth/login',
+            content_type='application/json',
+            data=json.dumps(self.login_user)
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 200)
+        self.assertEqual(result["error"], "Invalid credentials!")
+
+    def test_user_login_for_non_registered_uer(self):
+        """Test non registered user cannot login."""
+
+        rv = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        self.assertTrue(rv.status_code, 201)
+
+        self.login_user["username"] = "lucyliu"
+
+        res = self.app.post(
+            'api/v1/auth/login',
+            content_type='application/json',
+            data=json.dumps(self.login_user)
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 200)
+        self.assertEqual(result["error"], "User does not exist.")                               

@@ -7,14 +7,20 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         """Define tests variables and initialize the app."""
         self.app = app.test_client()
+
         self.user = {
-	        "firstname": "moureen",
-	        "lastname": "murungi",
-	        "othernames": "molly",
-	        "username": "more",
-	        "email": "molly@live.com",
-            "password": "123456",
-	        "phoneNumber": "256 781916565"
+            "firstname": "moureen",
+            "lastname": "murungi",
+            "othernames": "molly",
+            "username": "more",
+            "email": "molly@live.com",
+            "password": "654321",
+            "phoneNumber": "256 781916565"
+        }
+
+        self.login_user = {
+            "username": "more",
+            "password": "654321"
         }
  
     def tearDown(self):
