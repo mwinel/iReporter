@@ -1,6 +1,10 @@
 from flask import Flask
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
+bycrypt = Bcrypt(app)
+
+app.config['SECRET_KEY'] = "you-own-your-own"
 
 # Register blueprints
 from api.index import api as index_blueprint

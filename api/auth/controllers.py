@@ -1,16 +1,12 @@
-from flask import jsonify, request
+from flask import request, jsonify
 from api.auth.models import User, BaseUser
 from db.database import UsersDb
 
 users = UsersDb()
 
-def find_user(username):
-    user = users.find_by_username(username)
+def get_user_by_username(username):
+    user = users.find_user_by_username(username)
     return user
-
-def check_login_credentials(username, password):
-        user = users.check_user(username, password)
-        return user
 
 
 class UserController:
@@ -32,31 +28,46 @@ class UserController:
         error = user.validate_user_input()
         if error:
             return jsonify({"error": error}), 400
-        user_exists = users.find_by_username(username)
+        user_exists = users.find_user_by_username(username)
         if user_exists:
             return jsonify({
-                "error": "User with username '{}' already exists."
-                .format(username)
-            })
+                "error": "User already exists. Please login."
+            }), 202
 
         users.add_user(user)
+        # generate auth token
+        auth_token = user.encode_auth_token(username)
         return jsonify({
             "status": "User successfully created.",
-            "data": user.to_json() 
+            "data": user.to_json,
+            "auth_token": auth_token.decode('UTF-8')
         }), 201
 
     def user_login(self):
         data = request.get_json()
+        try:
+            user = get_user_by_username(username=data.get('username'))
+            auth_token = user.encode_auth_token(user.username)
+            if auth_token:
+                response = {
+                    "status": "Successfully logged in.",
+                    "auth_token": auth_token.decode('UTF-8')
+                }
+                return jsonify(response), 200
+        except Exception as e:
+            print(e)
+            response = {
+                "status": "Invalid credentials, Please try again."
+            }
+            return jsonify(response), 500
 
-        username = data.get('username')
-        password = data.get('password')
-
-        current_user = find_user(username)
-        if not current_user:
-            return jsonify({"error": "User does not exist."}), 200
-        check_credentials = check_login_credentials(username, password)
-        if check_credentials:
+    def get_all_users(self):
+        all_users = [i.to_json for i in users.get_all_users()]
+        if all_users:
             return jsonify({
-                "status": "Successfully logged in."
+                "status": "success",
+                "Users": all_users
             }), 200
-        return jsonify({"error": "Invalid credentials!"}), 401
+        return jsonify({
+            "error": "Sorry! No users were found.",
+        }), 200

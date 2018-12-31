@@ -6,11 +6,14 @@ class UsersDb:
     def add_user(self, user):
         self.users_list.append(user)
 
-    def find_by_username(self, username):
+    def get_all_users(self):
+        return self.users_list
+
+    def find_user_by_username(self, username):
         for user in self.users_list:
             if user.username == username:
                 return user
-        return None   
+        return None
 
     def check_user(self, username, password):
         for user in self.users_list:

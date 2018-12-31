@@ -18,6 +18,16 @@ class BaseTestCase(unittest.TestCase):
             "phoneNumber": "256 781916565"
         }
 
+        self.register_user = {
+            "firstname": "paul",
+            "lastname": "kasami",
+            "othernames": "polo",
+            "username": "polok",
+            "email": "polok@live.com",
+            "password": "654321",
+            "phoneNumber": "256 781916565"
+        }
+
         self.login_user = {
             "username": "more",
             "password": "654321"

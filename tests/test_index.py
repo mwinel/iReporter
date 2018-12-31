@@ -7,3 +7,4 @@ class TestIndex(BaseTestCase):
         rv = self.app.get('api/v1/index')
         self.assertTrue(rv.status_code, 200)
         self.assertIn('Welcome to iReporter', str(rv.data))
+        self.assertTrue(rv.content_type == 'application/json')
