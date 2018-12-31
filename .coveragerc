@@ -11,4 +11,5 @@ omit =
     tests/*
     db/*
     */controllers.py
+    */request_errors.py
     */models.py
