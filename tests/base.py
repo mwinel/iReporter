@@ -1,5 +1,6 @@
 import unittest
 from api import app
+from api.errors.request_errors import RequestError
 
 class BaseTestCase(unittest.TestCase):
     """Tests base case."""
@@ -7,7 +8,7 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         """Define tests variables and initialize the app."""
         self.app = app.test_client()
-
+        self.request_error = RequestError()
         self.user = {
             "firstname": "moureen",
             "lastname": "murungi",
