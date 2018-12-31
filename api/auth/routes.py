@@ -10,3 +10,7 @@ def signup():
 @api.route("/login", methods=['POST'])
 def login():
     return user_controller.user_login()
+
+@api.route("/users", methods=['GET'])
+def get_users():
+    return user_controller.get_all_users()

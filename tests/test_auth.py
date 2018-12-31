@@ -12,10 +12,12 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 201)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["status"], "User successfully created.")
-
+        self.assertTrue(result["status"] == "User successfully created.")
+        self.assertTrue(rv.content_type == 'application/json')
+        self.assertTrue(result['auth_token'])
+        
     def test_signup_user_twice(self):
         """Test user cannot signup twice."""
 
@@ -40,10 +42,11 @@ class TestUserAuth(BaseTestCase):
             'api/v1/auth/signup',
             content_type='application/json',
             data=json.dumps(user2)
-        )                   
-        self.assertTrue(res.status_code, 400)
-        status = json.loads(res.data.decode())
-        self.assertEqual(status["error"], "User with username 'more' already exists.")
+        )
+        result = json.loads(res.data.decode())               
+        self.assertTrue(res.status_code, 202)
+        self.assertTrue(result["error"] == "User already exists. Please login.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_invalid_email(self):
         """Test user cannot signup with an invalid email."""
@@ -55,23 +58,24 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Enter a valid email address.")
+        self.assertTrue(result["error"] == "Enter a valid email address.")
+        self.assertTrue(rv.content_type == 'application/json')
         
     def test_signup_with_short_password(self):
         """Test user cannot signup with a short password."""
 
-        self.user["password"] = "1234"
+        self.user["password"] = "654"
 
         rv = self.app.post(
             'api/v1/auth/signup',
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Password too short.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_firstname(self):
         """Test user cannot signup with missing firstname field."""
@@ -83,9 +87,10 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Firstname field cannot be left empty.")
+        self.assertTrue(result["error"] == "Firstname field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_lastname(self):
         """Test user cannot signup with missing lastname field."""
@@ -97,9 +102,10 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Lastname field cannot be left empty.")
+        self.assertTrue(result["error"] == "Lastname field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_othernames(self):
         """Test user cannot signup with missing othernames field."""
@@ -111,9 +117,10 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Othernames field cannot be left empty.")
+        self.assertTrue(result["error"] == "Othernames field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_username(self):
         """Test user cannot signup with missing username field."""
@@ -125,9 +132,10 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Username field cannot be left empty.")
+        self.assertTrue(result["error"] == "Username field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_email(self):
         """Test user cannot signup with missing email field."""
@@ -139,9 +147,10 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Email field cannot be left empty.")
+        self.assertTrue(result["error"] == "Email field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_password(self):
         """Test user cannot signup with missing password field."""
@@ -153,9 +162,9 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Password field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_signup_with_missing_phonenumber(self):
         """Test user cannot signup with missing phonenumber field."""
@@ -167,20 +176,24 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
-        status = json.loads(rv.data.decode())
-        self.assertEqual(status["error"], "Phone number field cannot be left empty.")
+        self.assertTrue(result["error"] == "Phone number field cannot be left empty.")
+        self.assertTrue(rv.content_type == 'application/json')
 
     def test_user_login(self):
         """Test registered user can successfully login."""
 
+        # Register user
         rv = self.app.post(
             'api/v1/auth/signup',
             content_type='application/json',
             data=json.dumps(self.user)
         )
+        result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 201)
 
+        # Login registered user
         res = self.app.post(
             'api/v1/auth/login',
             content_type='application/json',
@@ -188,46 +201,14 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(res.data.decode())
         self.assertTrue(res.status_code, 200)
-        self.assertEqual(result["status"], "Successfully logged in.")
+        self.assertTrue(result["status"] == "Successfully logged in.")
+        self.assertTrue(result['auth_token'])
 
-    def test_user_login_with_invalid_credentials(self):
-        """Test user cannot login with invalid credentials."""
+    def test_get_all_users(self):
+        """Test api can fetch all users."""
 
-        rv = self.app.post(
-            'api/v1/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
+        rv = self.app.get(
+            'api/v1/auth/users',
+            content_type='application/json'
         )
-        self.assertTrue(rv.status_code, 201)
-
-        self.login_user["password"] = "123456"
-
-        res = self.app.post(
-            'api/v1/auth/login',
-            content_type='application/json',
-            data=json.dumps(self.login_user)
-        )
-        result = json.loads(res.data.decode())
-        self.assertTrue(res.status_code, 200)
-        self.assertEqual(result["error"], "Invalid credentials!")
-
-    def test_user_login_for_non_registered_uer(self):
-        """Test non registered user cannot login."""
-
-        rv = self.app.post(
-            'api/v1/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        self.assertTrue(rv.status_code, 201)
-
-        self.login_user["username"] = "lucyliu"
-
-        res = self.app.post(
-            'api/v1/auth/login',
-            content_type='application/json',
-            data=json.dumps(self.login_user)
-        )
-        result = json.loads(res.data.decode())
-        self.assertTrue(res.status_code, 200)
-        self.assertEqual(result["error"], "User does not exist.")                               
+        self.assertTrue(rv.status_code, 200)

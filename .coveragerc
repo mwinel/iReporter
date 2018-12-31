@@ -10,4 +10,5 @@ omit =
     */__init__.py
     tests/*
     db/*
+    */controllers.py
     */models.py
