@@ -26,8 +26,11 @@ class UserController:
                     username, email, password)
 
         error = user.validate_user_input()
+        base_error = user.validate_base_input()
         if error:
             return jsonify({"error": error}), 400
+        if base_error:
+            return jsonify({"error": base_error}), 400
         user_exists = users.find_user_by_username(username)
         if user_exists:
             return jsonify({

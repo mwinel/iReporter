@@ -66,11 +66,11 @@ class User:
             return "Email field cannot be left empty."
         elif not self.password or self.password.isspace():
             return "Password field cannot be left empty."
-        elif len(self.password) < 6:
-            return "Password too short."
         elif not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
             return "Enter a valid email address."
-        elif not self.base.firstname or self.base.firstname.isspace():
+
+    def validate_base_input(self):
+        if not self.base.firstname or self.base.firstname.isspace():
             return "Firstname field cannot be left empty."
         elif not self.base.lastname or self.base.lastname.isspace():
             return "Lastname field cannot be left empty."
