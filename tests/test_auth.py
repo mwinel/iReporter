@@ -14,6 +14,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 201)
+        self.assertTrue(result["status"] == 201)
         self.assertTrue(result["message"] == "User successfully created.")
         self.assertTrue(rv.content_type == 'application/json')
         self.assertTrue(result['auth_token'])
@@ -45,6 +46,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(res.data.decode())               
         self.assertTrue(res.status_code, 202)
+        self.assertTrue(result["status"] == 202)
         self.assertTrue(result["message"] == "User already exists. Please login.")
 
     def test_signup_with_invalid_email(self):
@@ -59,6 +61,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Enter a valid email address.")
         
     def test_signup_with_short_password(self):
@@ -73,6 +76,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(
             result["error"] == "Password too short, must be atleast 6 characters or more.")
 
@@ -88,6 +92,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Firstname field cannot be left empty.")
 
     def test_signup_with_missing_lastname(self):
@@ -102,6 +107,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Lastname field cannot be left empty.")
 
     def test_signup_with_missing_othernames(self):
@@ -116,6 +122,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Othernames field cannot be left empty.")
 
     def test_signup_with_missing_username(self):
@@ -130,6 +137,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Username field cannot be left empty.")
 
     def test_signup_with_missing_email(self):
@@ -144,6 +152,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Email field cannot be left empty.")
 
     def test_signup_with_missing_password(self):
@@ -158,6 +167,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Password field cannot be left empty.")
 
     def test_signup_with_missing_phonenumber(self):
@@ -172,6 +182,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
+        self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Phone number field cannot be left empty.")
 
     def test_user_login(self):
@@ -194,6 +205,7 @@ class TestUserAuth(BaseTestCase):
         )
         result = json.loads(res.data.decode())
         self.assertTrue(res.status_code, 200)
+        self.assertTrue(result["status"] == 200)
         self.assertTrue(result["message"] == "Successfully logged in.")
 
     def test_login_for_non_registered_user(self):
