@@ -20,3 +20,12 @@ class UsersDb:
             if username == user.username and password == user.password:
                 return user
             return None
+
+
+class RedflagsDb:
+
+    def __init__(self):
+        self.redflags_list = []
+
+    def add_redflag(self, redflag):
+        self.redflags_list.append(redflag)

@@ -1,12 +1,39 @@
 from flask import request, jsonify
+from flask_jwt_extended import create_access_token
+from api import jwt
 from api.auth.models import User, BaseUser
 from db.database import UsersDb
 
 users = UsersDb()
 
+@jwt.expired_token_loader
+def expired_token_callback():
+    return jsonify({
+        "status": 401,
+        "message": "The token has expired, please login again."
+    }), 401
+
+@jwt.invalid_token_loader
+def invalid_token_callback(callback):
+    return jsonify({
+        "status": 401,
+        "message": "Invalid token, please login again."
+    }), 401
+
+@jwt.unauthorized_loader
+def unauthorized_callback(callback):
+    return jsonify({
+        "status": 401,
+        "message": "Missing Authorization Header."
+    })
+
 def get_user_by_username(username):
     user = users.find_user_by_username(username)
     return user
+
+def check_login_credentials(username, password):
+    user = users.check_user(username, password)
+    return user 
 
 
 class UserController:
@@ -28,49 +55,66 @@ class UserController:
         error = user.validate_user_input()
         base_error = user.validate_base_input()
         if error:
-            return jsonify({"error": error}), 400
+            return jsonify({
+                "status": 400,
+                "error": error
+            }), 400
         if base_error:
-            return jsonify({"error": base_error}), 400
+            return jsonify({
+                "status": 400,
+                "error": base_error
+            }), 400
         user_exists = users.find_user_by_username(username)
         if user_exists:
             return jsonify({
-                "error": "User already exists. Please login."
+                "status": 202,
+                "message": "User already exists. Please login."
             }), 202
-
+        password_hash = user.hash_password(password)
         users.add_user(user)
-        # generate auth token
-        auth_token = user.encode_auth_token(username)
+        auth_token = create_access_token(username)
         return jsonify({
-            "status": "User successfully created.",
+            "status": 201,
+            "message": "User successfully created.",
             "data": user.to_json,
-            "auth_token": auth_token.decode('UTF-8')
+            "auth_token": auth_token
         }), 201
 
     def user_login(self):
         data = request.get_json()
-        try:
-            user = get_user_by_username(username=data.get('username'))
-            auth_token = user.encode_auth_token(user.username)
-            if auth_token:
-                response = {
-                    "status": "Successfully logged in.",
-                    "auth_token": auth_token.decode('UTF-8')
-                }
-                return jsonify(response), 200
-        except Exception as e:
-            print(e)
-            response = {
-                "status": "Invalid credentials, Please try again."
-            }
-            return jsonify(response), 500
+
+        username = data.get('username')
+        password = data.get('password')
+
+        current_user = get_user_by_username(username)
+        if not current_user:
+            return jsonify({
+                "status": 200,
+                "error": "User does not exist."
+            }), 200
+            
+        check_credentials = check_login_credentials(username, password)
+        if check_credentials:
+            access_token = create_access_token(identity=username)
+            return jsonify({
+                "status": 200,
+                "message": "Successfully logged in.",
+                "access_token": access_token
+            }), 200
+        return jsonify({
+            "status": 401,
+            "error": "Invalid Credentials!"
+        }), 401
 
     def get_all_users(self):
         all_users = [i.to_json for i in users.get_all_users()]
         if all_users:
             return jsonify({
-                "status": "success",
+                "status": 200,
+                "message": "success",
                 "Users": all_users
             }), 200
         return jsonify({
-            "error": "Sorry! No users were found.",
+            "status": 200,
+            "error": "Sorry! No users were found."
         }), 200

@@ -1,7 +1,6 @@
-import datetime
 import re
-import jwt
-from api import app, bycrypt
+import datetime
+from passlib.apps import custom_app_context as pwd_context
 
 
 class BaseUser:
@@ -24,40 +23,14 @@ class User:
         self.base = base
         self.username = username
         self.email = email
-        self.password = bycrypt.generate_password_hash(
-            password
-        ).decode()
+        self.password = password
         self.isAdmin = False
 
-    def password_is_valid(self, password):
-        return bycrypt.check_password_hash(self.password, password)
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
 
-    def encode_auth_token(self, username):
-        # generates auth token
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=200),
-                'iat': datetime.datetime.utcnow(),
-                'sub': username
-            }
-            return jwt.encode(
-                payload,
-                app.config['SECRET_KEY'],
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
-
-    @staticmethod
-    def decode_auth_token(auth_token):
-        # decodes auth token
-        try:
-            payload = jwt.decode(auth_token, app.config['SECRET_KEY'])
-            return payload['sub']
-        except jwt.ExpiredSignatureError:
-            return "Signature expired, please login again."
-        except jwt.InvalidTokenError:
-            return "Invalid Token, please login again."
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
 
     def validate_user_input(self):
         if not self.username or self.username.isspace():
@@ -66,6 +39,8 @@ class User:
             return "Email field cannot be left empty."
         elif not self.password or self.password.isspace():
             return "Password field cannot be left empty."
+        elif len(self.password) < 6:
+            return "Password too short, must be atleast 6 characters or more."
         elif not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
             return "Enter a valid email address."
 

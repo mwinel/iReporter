@@ -1,3 +1,4 @@
+from flask_jwt_extended import jwt_required
 from api.auth import api
 from api.auth.controllers import UserController
 
@@ -12,5 +13,6 @@ def login():
     return user_controller.user_login()
 
 @api.route("/users", methods=['GET'])
+@jwt_required
 def get_users():
     return user_controller.get_all_users()
