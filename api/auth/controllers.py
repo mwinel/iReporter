@@ -106,7 +106,7 @@ class UserController:
             "error": "Invalid Credentials!"
         }), 401
 
-    def get_all_users(self):
+    def fetch_all_users(self):
         all_users = [i.to_json for i in users.get_all_users()]
         if all_users:
             return jsonify({
