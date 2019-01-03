@@ -10,4 +10,8 @@ redflags_controller = RedFlagsController()
 @jwt_required
 def create_redflag():
     return redflags_controller.create_redflag()
-        
+
+@api.route("/red-flags", methods=["GET"])
+@jwt_required
+def get_redflags():
+    return redflags_controller.fetch_all_redflags()      

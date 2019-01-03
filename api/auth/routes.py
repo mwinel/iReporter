@@ -15,4 +15,4 @@ def login():
 @api.route("/users", methods=['GET'])
 @jwt_required
 def get_users():
-    return user_controller.get_all_users()
+    return user_controller.fetch_all_users()

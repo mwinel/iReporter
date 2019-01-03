@@ -77,3 +77,16 @@ class RedflagTestCase(unittest.TestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 201)
         self.assertTrue(result["message"] == "Redflag successfully created.")
+
+    def test_fetch_redflags(self):
+        """Test API can fetch all redflags."""
+
+        res = self.signup_user()
+        auth_token = json.loads(res.data.decode()).get('auth_token')
+        rv = self.app.get(
+            '/api/v1/red-flags',
+            headers=dict(Authorization="Bearer " + str(auth_token)),
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)

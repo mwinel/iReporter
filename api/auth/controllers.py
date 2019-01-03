@@ -25,7 +25,7 @@ def unauthorized_callback(callback):
     return jsonify({
         "status": 401,
         "message": "Missing Authorization Header."
-    })
+    }), 401
 
 def get_user_by_username(username):
     user = users.find_user_by_username(username)
@@ -108,13 +108,8 @@ class UserController:
 
     def fetch_all_users(self):
         all_users = [i.to_json for i in users.get_all_users()]
-        if all_users:
-            return jsonify({
-                "status": 200,
-                "message": "success",
-                "Users": all_users
-            }), 200
         return jsonify({
             "status": 200,
-            "error": "Sorry! No users were found."
+            "message": "success",
+            "Users": all_users
         }), 200

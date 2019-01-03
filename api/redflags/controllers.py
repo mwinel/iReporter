@@ -28,3 +28,11 @@ class RedFlagsController:
             "message": "Redflag successfully created.",
             "data": redflag.to_json
         }), 201
+
+    def fetch_all_redflags(self):
+        all_redflags = [i.to_json for i in redflags.get_all_redflags()]
+        return jsonify({
+            "status": 200,
+            "message": "success",
+            "Redflags": all_redflags
+        }), 200
