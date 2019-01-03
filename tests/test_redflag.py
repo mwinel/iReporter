@@ -50,14 +50,24 @@ class RedflagTestCase(unittest.TestCase):
                 data=json.dumps(login_data)
             )
 
+    def test_get_users(self):
+        """Test API can fetch all users."""
+
+        res = self.signup_user()
+        auth_token = json.loads(res.data.decode()).get('auth_token')
+        rv = self.app.get(
+            '/api/v1/auth/users',
+            headers=dict(Authorization="Bearer " + str(auth_token)),
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(res.status_code, 200)
+
     def test_create_redflag(self):
         """Test API can create a redflag."""
 
         res = self.signup_user()
-        # obtain access token
-        auth_token = json.loads(res.data.decode())['auth_token']
-        # ensure the request has an authorization header set with the 
-        # auth token in it
+        auth_token = json.loads(res.data.decode()).get('auth_token')
         rv = self.app.post(
             '/api/v1/red-flags',
             headers=dict(Authorization="Bearer " + auth_token),
@@ -67,3 +77,16 @@ class RedflagTestCase(unittest.TestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 201)
         self.assertTrue(result["message"] == "Redflag successfully created.")
+
+    def test_fetch_redflags(self):
+        """Test API can fetch all redflags."""
+
+        res = self.signup_user()
+        auth_token = json.loads(res.data.decode()).get('auth_token')
+        rv = self.app.get(
+            '/api/v1/red-flags',
+            headers=dict(Authorization="Bearer " + str(auth_token)),
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)

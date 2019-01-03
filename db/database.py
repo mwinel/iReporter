@@ -29,3 +29,6 @@ class RedflagsDb:
 
     def add_redflag(self, redflag):
         self.redflags_list.append(redflag)
+
+    def get_all_redflags(self):
+        return self.redflags_list
