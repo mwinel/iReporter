@@ -1,10 +1,32 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from api.errors.request_errors import RequestError
 
 app = Flask(__name__)
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = "you-own-your-own"
+
+# Auth exceptions
+@jwt.expired_token_loader
+def expired_token_callback():
+    return jsonify({
+        "status": 401,
+        "message": "The token has expired, please login again."
+    }), 401
+
+@jwt.invalid_token_loader
+def invalid_token_callback(callback):
+    return jsonify({
+        "status": 401,
+        "message": "Invalid token, please login again."
+    }), 401
+
+@jwt.unauthorized_loader
+def unauthorized_callback(callback):
+    return jsonify({
+        "status": 401,
+        "message": "Missing Authorization Header."
+    }), 401
 
 # Request exceptions
 app.errorhandler(404)(RequestError.not_found)
