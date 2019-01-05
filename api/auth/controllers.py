@@ -6,27 +6,6 @@ from db.database import UsersDb
 
 users = UsersDb()
 
-@jwt.expired_token_loader
-def expired_token_callback():
-    return jsonify({
-        "status": 401,
-        "message": "The token has expired, please login again."
-    }), 401
-
-@jwt.invalid_token_loader
-def invalid_token_callback(callback):
-    return jsonify({
-        "status": 401,
-        "message": "Invalid token, please login again."
-    }), 401
-
-@jwt.unauthorized_loader
-def unauthorized_callback(callback):
-    return jsonify({
-        "status": 401,
-        "message": "Missing Authorization Header."
-    }), 401
-
 def get_user_by_username(username):
     user = users.find_user_by_username(username)
     return user
@@ -105,11 +84,3 @@ class UserController:
             "status": 401,
             "error": "Invalid Credentials!"
         }), 401
-
-    def fetch_all_users(self):
-        all_users = [i.to_json for i in users.get_all_users()]
-        return jsonify({
-            "status": 200,
-            "message": "success",
-            "Users": all_users
-        }), 200

@@ -1,6 +1,6 @@
 import unittest
+import json
 from api import app
-from api.errors.request_errors import RequestError
 
 class BaseTestCase(unittest.TestCase):
     """Tests base case."""
@@ -8,7 +8,6 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         """Define tests variables and initialize the app."""
         self.app = app.test_client()
-        self.request_error = RequestError()
         self.user = {
             "firstname": "moureen",
             "lastname": "murungi",
@@ -18,20 +17,14 @@ class BaseTestCase(unittest.TestCase):
             "password": "654321",
             "phoneNumber": "256 781916565"
         }
-
-        self.register_user = {
-            "firstname": "paul",
-            "lastname": "kasami",
-            "othernames": "polo",
-            "username": "polok",
-            "email": "polok@live.com",
-            "password": "654321",
-            "phoneNumber": "256 781916565"
-        }
-
-        self.login_user = {
-            "username": "more",
-            "password": "654321"
+        self.redflag = {
+            "title": "stolen HIV/AIDS money",
+            "redflagType": "red-flag",
+            "location": "lat long cordinates",
+            "status": "draft",
+            "image": "Image 1",
+            "video": "Image 1",
+            "comment": "Alot of money has stolen since 2010."
         }
  
     def tearDown(self):
