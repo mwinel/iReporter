@@ -34,5 +34,18 @@ class RedFlagsController:
         return jsonify({
             "status": 200,
             "message": "success",
-            "Redflags": all_redflags
+            "data": all_redflags
+        }), 200
+
+    def fetch_redflag(self, redflag_id):        
+        redflag = [i.to_json for i in redflags.get_all_redflags() if i.id == redflag_id]
+        if redflag:
+            return jsonify({
+                "status": 200,
+                "message": "success",
+                "data": redflag
+            }), 200
+        return jsonify({
+            "status": 200,
+            "message": "Sorry! Redflag was not found."
         }), 200
