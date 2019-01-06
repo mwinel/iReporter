@@ -2,30 +2,30 @@ import datetime
 
 class BaseRedFlag:
 
-    redflag_id = 1
-
     def __init__(self, status, image, video, comment):
         self.status = status
         self.image = image
         self.video = video
         self.comment = comment
         self.createdOn = datetime.datetime.now()
-        self.id = BaseRedFlag.redflag_id
-        BaseRedFlag.redflag_id += 1
 
 
 class RedFlag:
+
+    redflag_id = 1
 
     def __init__(self, base, title, redflagType, location):
         self.base = base
         self.title = title
         self.redflagType = redflagType
         self.location = location
+        self.id = RedFlag.redflag_id
+        RedFlag.redflag_id += 1
 
     @property
     def to_json(self):
         return {
-            "id": self.base.id,
+            "id": self.id,
             "createdOn": self.base.createdOn,
             "title": self.title,
             "type": self.redflagType,

@@ -14,4 +14,9 @@ def create_redflag():
 @api.route("/red-flags", methods=["GET"])
 @jwt_required
 def get_redflags():
-    return redflags_controller.fetch_all_redflags()      
+    return redflags_controller.fetch_all_redflags() 
+
+@api.route("/red-flags/<int:redflag_id>")
+@jwt_required
+def get_redflag(redflag_id):
+    return redflags_controller.fetch_redflag(redflag_id)
