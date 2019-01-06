@@ -49,3 +49,16 @@ class RedFlagsController:
             "status": 200,
             "message": "Sorry! Redflag was not found."
         }), 200
+
+    def delete_a_redflag(self, redflag_id):
+        for redflag in redflags.get_all_redflags():
+            if redflag.id == redflag_id:
+                redflags.redflags_list.remove(redflag)
+                return jsonify({
+                    "status": 200,
+                    "message": "Redflag successfully deleted."
+                }), 200
+        return jsonify({
+            "status": 200,
+            "message": "Redflag was not found."
+        }), 200

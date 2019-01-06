@@ -84,3 +84,43 @@ class RedflagTestCase(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 200)
         self.assertTrue(result["message"] == "Sorry! Redflag was not found.")
+
+    def test_remove_a_specific_redflag(self):
+        """Test API can delete a specific redflag."""
+
+        self.user["username"] = "carla"
+        res = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.delete(
+            '/api/v1/red-flags/1',
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "Redflag successfully deleted.")
+
+    def test_remove_a_non_existing_redflag(self):
+        """Test API cannot delete a non existing redflag."""
+
+        self.user["username"] = "samuel"
+        res = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.delete(
+            '/api/v1/red-flags/9999999999',
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "Redflag was not found.")
