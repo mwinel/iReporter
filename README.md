@@ -3,6 +3,72 @@
 # iReporter
 iReporter enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
 
+### Installation and Set Up
+
+Clone the repo from GitHub:
+
+```
+https://github.com/mwinel/iReporter.git
+```
+
+Create and activate virtualenv
+
+```
+python -m venv venv
+venv\Scripts\activate
+```
+
+Install necessary requirements
+
+```
+pip install -r requirements.txt
+```
+
+Run the app and access the application at the address **http://localhost:5000/**
+
+```
+python run.py
+```
+
+Run unit tests
+
+```
+python -m unittest discover
+```
+
+### Sample request
+
+Test all endpoints and see how they work using Postman.
+
+```
+
+http GET http://localhost:5000/api/v1/index
+
+HTTP/1.0 200 OK
+Content-Length: 41
+Content-Type: application/json
+Date: Tue, 08 Jan 2019 03:30:26 GMT
+Server: Werkzeug/0.14.1 Python/3.6.5
+
+{
+    "message": "Welcome to iReporter."
+}
+
+```
+
+### API Endpoints
+
+| Resource URL | Methods | Description | Requires Auth |
+| -------- | ------------- | --------- |--------------- |
+| `/api/v1/index` | `GET`  | The index | `FALSE` |
+| `/api/v1/auth/signup` | `POST`  | User Signup | `FALSE` |
+| `/api/v1/auth/login` | `POST`  | User Login | `TRUE` |
+| `/api/v1/red-flags` | `POST`  | Add redflag | `TRUE` |
+| `/api/v1/red-flags` | `GET`  | Fetch redflags | `TRUE` |
+| `/api/v1/red-flags/<id>` | `GET`  | Fetch redflag | `TRUE` |
+| `/api/v1/red-flags/<id>` | `PUT`  | Update redflag | `TRUE` |
+| `/api/v1/red-flags/<id>` | `DELETE`  | Delete redflag | `TRUE` |
+
 ### UI
 [Checkout the project user interface.](https://mwinel.github.io/iReporter/UI/signup.html)
 
