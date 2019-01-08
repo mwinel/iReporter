@@ -124,3 +124,51 @@ class RedflagTestCase(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 200)
         self.assertTrue(result["message"] == "Redflag was not found.")
+
+    def test_update_a_redflag(self):
+        """Test API can update a redflag given its id."""
+
+        self.user["username"] = "mary"
+        res = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.post(
+            '/api/v1/red-flags', 
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json',
+            data=json.dumps(self.redflag2)
+        )
+        
+        rv = self.app.put(
+            '/api/v1/red-flags/2', 
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json',
+            data=json.dumps(self.redflag_updated)
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 201)
+        self.assertTrue(result["message"] == "Redflag successfully updated.")
+
+    def test_update_a_non_existing_redflag(self):
+        """Test API cannot update a non existing redflag."""
+
+        self.user["username"] = "marylin"
+        res = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+
+        rv = self.app.put(
+            '/api/v1/red-flags/20000', 
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json',
+            data=json.dumps(self.redflag_updated)
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "Redflag was not found.")

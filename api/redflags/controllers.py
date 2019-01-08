@@ -37,6 +37,31 @@ class RedFlagsController:
             "data": all_redflags
         }), 200
 
+    def update_redflag(self, redflag_id):
+        redflag = [i.to_json for i in redflags.get_all_redflags() if i.id == redflag_id]
+        if redflag:
+            data = request.get_json()
+
+            redflag[0]['title'] = data.get('title', redflag[0]['title'])
+            redflag[0]['type'] = data.get('redflagType', redflag[0]['type'])
+            redflag[0]['location'] = data.get('location', redflag[0]['location'])
+            redflag[0]['status'] = data.get('status', redflag[0]['status'])
+            redflag[0]['Images'] = data.get('image', redflag[0]['Images'])
+            redflag[0]['Videos'] = data.get('video', redflag[0]['Videos'])
+            redflag[0]['comment'] = data.get('comment', redflag[0]['comment'])
+            
+            redflags.add_redflag(redflag)
+            return jsonify({
+                "status": 201,
+                "message": "Redflag successfully updated.",
+                "data": redflag
+            }), 201
+
+        return jsonify({
+            "status": 200,
+            "message": "Redflag was not found."
+        }), 200
+
     def fetch_redflag(self, redflag_id):        
         redflag = [i.to_json for i in redflags.get_all_redflags() if i.id == redflag_id]
         if redflag:

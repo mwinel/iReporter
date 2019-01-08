@@ -26,6 +26,24 @@ class BaseTestCase(unittest.TestCase):
             "video": "Image 1",
             "comment": "Alot of money has stolen since 2010."
         }
+        self.redflag2 = {
+            "title": "stolen HIV/AIDS money",
+            "redflagType": "red-flag",
+            "location": "lat long cordinates",
+            "status": "draft",
+            "image": "Image 1",
+            "video": "Image 1",
+            "comment": "Alot of money has stolen since 2010."
+        }
+        self.redflag_updated = {
+            "title": "stolen Education money",
+            "type": "incident",
+            "location": "lat long cordinates ",
+            "status": "investigation",
+            "Images": "Image 2",
+            "Videos": "Image 2",
+            "comment": "Alot of money has stolen since 2011."
+        }
  
     def tearDown(self):
         pass
