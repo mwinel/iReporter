@@ -74,11 +74,11 @@ class UserController:
             
         check_credentials = check_login_credentials(username, password)
         if check_credentials:
-            access_token = create_access_token(identity=username)
+            auth_token = create_access_token(identity=username)
             return jsonify({
                 "status": 200,
                 "message": "Successfully logged in.",
-                "access_token": access_token
+                "access_token": auth_token
             }), 200
         return jsonify({
             "status": 401,

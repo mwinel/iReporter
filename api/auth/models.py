@@ -29,9 +29,6 @@ class User:
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
 
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
-
     def validate_user_input(self):
         if not self.username or self.username.isspace():
             return "Username field cannot be left empty."
