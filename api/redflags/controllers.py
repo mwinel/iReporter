@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flask_jwt_extended import get_jwt_identity
 from api.redflags.models import RedFlag, BaseRedFlag
 from db.database import RedflagsDb
 
@@ -8,6 +9,8 @@ redflags = RedflagsDb()
 class RedFlagsController:
 
     def create_redflag(self):
+
+        current_user = get_jwt_identity()
         
         data = request.get_json()
 
@@ -18,9 +21,24 @@ class RedFlagsController:
         image = data.get('image')
         video = data.get('video')
         comment = data.get('comment')
+        created_by = current_user
 
-        redflag = RedFlag(BaseRedFlag(status, image, video, comment),
+        redflag = RedFlag(BaseRedFlag(status, image, video, comment, created_by),
                           title, redflagType, location)
+
+        validate_base = redflag.base.validate_base_redflag()
+        validate_redflag = redflag.validate_redflag()
+        if validate_base:
+            return jsonify({
+                "status": 400,
+                "error": validate_base
+            }), 400
+
+        if validate_redflag:
+            return jsonify({
+                "status": 400,
+                "error": validate_redflag
+            }), 400
         
         redflags.add_redflag(redflag)
         return jsonify({
