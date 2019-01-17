@@ -1,10 +1,10 @@
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
-from api import jwt
 from api.auth.models import User, BaseUser
 from db.database import UsersDb
 
 users = UsersDb()
+
 
 def get_user_by_username(username):
     """
@@ -14,13 +14,14 @@ def get_user_by_username(username):
     user = users.find_user_by_username(username)
     return user
 
+
 def check_login_credentials(username, password):
     """
     checks for user login credentials
     returns: user
     """
     user = users.check_user(username, password)
-    return user 
+    return user
 
 
 class UserController:
@@ -47,7 +48,7 @@ class UserController:
         othernames = data.get('othernames')
         username = data.get('username')
         email = data.get('email')
-        password = data.get('password') 
+        password = data.get('password')
         phoneNumber = data.get('phoneNumber')
 
         user = User(BaseUser(firstname, lastname, othernames, phoneNumber),
@@ -95,7 +96,7 @@ class UserController:
                 "status": 200,
                 "error": "User does not exist."
             }), 200
-        # check for login credentials  
+        # check for login credentials
         check_credentials = check_login_credentials(username, password)
         if check_credentials:
             auth_token = create_access_token(identity=username)

@@ -37,8 +37,8 @@ class BaseUser:
         self.phoneNumber = phoneNumber
         self.registered = datetime.datetime.now()
         self.id = BaseUser.user_id
-        BaseUser.user_id += 1  
-         
+        BaseUser.user_id += 1
+
 
 class User:
     """
@@ -66,7 +66,8 @@ class User:
     validate_user_input
         validates user input (username, email, password)
     validate_base_input
-        validates base user input (firstname, lastname, othernames, phone number)
+        validates base user input (firstname, lastname, othernames,
+        phone number)
     to_json
         returns user data in json serializable format
     """
@@ -83,7 +84,7 @@ class User:
 
     def hash_password(self, password):
         """
-        takes in a plain password and stores 
+        takes in a plain password and stores
         the hash of it with the user
         """
         self.password_hash = pwd_context.encrypt(password)
@@ -116,7 +117,7 @@ class User:
         elif not self.base.othernames or self.base.othernames.isspace():
             return "Othernames field cannot be left empty."
         elif not self.base.phoneNumber or self.base.phoneNumber.isspace():
-            return "Phone number field cannot be left empty." 
+            return "Phone number field cannot be left empty."
 
     @property
     def to_json(self):
@@ -132,6 +133,6 @@ class User:
             "registered": self.base.registered,
             "admin": self.isAdmin,
             "email": self.email,
-            "password": self.password, 
+            "password": self.password,
             "phoneNumber": self.base.phoneNumber
         }

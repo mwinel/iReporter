@@ -41,7 +41,7 @@ class RequestError:
         """
         return jsonify({
             "error": RequestError.message["error_message"].format(
-                "405 Method Not Allowed: The method is not allowed for the requested URL", 
+                "405 Method Not Allowed: The method is not allowed for the requested URL",
                 request.url
             )
         }), 405

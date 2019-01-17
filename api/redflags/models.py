@@ -1,5 +1,6 @@
 import datetime
 
+
 class BaseRedFlag:
     """
     A class used to represent redflag base data.
@@ -24,7 +25,7 @@ class BaseRedFlag:
     Methods
     -------
     validate_base_redflag
-        validates redflag input (status, image, video, comment, 
+        validates redflag input (status, image, video, comment,
         created_by, created_on)
     """
 
@@ -38,7 +39,7 @@ class BaseRedFlag:
         self.comment = comment
         self.created_on = datetime.datetime.now()
         self.created_by = created_by
-   
+
     def validate_base_redflag(self):
         """
         validates redflag base inputs
