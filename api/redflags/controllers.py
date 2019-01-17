@@ -57,7 +57,7 @@ class RedFlagsController:
                 "status": 400,
                 "error": validate_redflag
             }), 400
-        
+
         redflags.add_redflag(redflag)
         return jsonify({
             "status": 201,
@@ -90,7 +90,7 @@ class RedFlagsController:
             redflag[0]['Images'] = data.get('image', redflag[0]['Images'])
             redflag[0]['Videos'] = data.get('video', redflag[0]['Videos'])
             redflag[0]['comment'] = data.get('comment', redflag[0]['comment'])
-            
+
             redflags.add_redflag(redflag)
             return jsonify({
                 "status": 201,
@@ -103,10 +103,10 @@ class RedFlagsController:
             "message": "Redflag was not found."
         }), 200
 
-    def fetch_redflag(self, redflag_id): 
+    def fetch_redflag(self, redflag_id):
         """
         returns a single redflag given its id
-        """       
+        """
         redflag = [i.to_json for i in redflags.get_all_redflags() if i.id == redflag_id]
         if redflag:
             return jsonify({
