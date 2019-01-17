@@ -53,5 +53,5 @@ app.errorhandler(405)(RequestError.method_not_allowed)
 
 # Register blueprints
 app.register_blueprint(index_blueprint, url_prefix='/api/v1')
-app.register_blueprint(auth_blueprint, url_prefix='/api/v1/auth')
+app.register_blueprint(auth_blueprint, url_prefix='/api/v1')
 app.register_blueprint(redflags_blueprint, url_prefix='/api/v1')

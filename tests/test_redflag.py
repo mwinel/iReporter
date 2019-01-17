@@ -362,3 +362,23 @@ class RedflagTestCase(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 200)
         self.assertTrue(result["message"] == "Redflag was not found.")
+
+    def test_return_users(self):
+        """Test API can fetch all users"""
+
+        self.user["username"] = "paulb"
+        res = self.app.post(
+            'api/v1/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.get(
+            'api/v1/users', 
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "success")

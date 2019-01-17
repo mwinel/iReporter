@@ -109,3 +109,14 @@ class UserController:
             "status": 401,
             "error": "Invalid Credentials!"
         }), 401
+
+    def fetch_users(self):
+        """
+        returns a list with all users
+        """
+        all_users = [i.to_json for i in users.get_all_users()]
+        return jsonify({
+            "status": 200,
+            "message": "success",
+            "data": all_users
+        }), 200
