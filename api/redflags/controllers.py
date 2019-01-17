@@ -33,7 +33,7 @@ class RedFlagsController:
         current_user = get_jwt_identity()
         data = request.get_json()
         title = data.get('title')
-        redflagType = data.get('redflagType')
+        redflag_type = data.get('redflag_type')
         location = data.get('location')
         status = data.get('status')
         image = data.get('image')
@@ -42,7 +42,7 @@ class RedFlagsController:
         created_by = current_user
 
         redflag = RedFlag(BaseRedFlag(status, image, video, comment, created_by),
-                          title, redflagType, location)
+                          title, redflag_type, location)
 
         validate_base = redflag.base.validate_base_redflag()
         validate_redflag = redflag.validate_redflag()
@@ -84,7 +84,7 @@ class RedFlagsController:
         if redflag:
             data = request.get_json()
             redflag[0]['title'] = data.get('title', redflag[0]['title'])
-            redflag[0]['type'] = data.get('redflagType', redflag[0]['type'])
+            redflag[0]['type'] = data.get('redflag_type', redflag[0]['type'])
             redflag[0]['location'] = data.get('location', redflag[0]['location'])
             redflag[0]['status'] = data.get('status', redflag[0]['status'])
             redflag[0]['Images'] = data.get('image', redflag[0]['Images'])

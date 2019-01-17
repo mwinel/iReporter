@@ -36,7 +36,7 @@ class TestUserAuth(BaseTestCase):
             "username": "more",
             "email": "molly@live.com",
             "password": "654321",
-            "phoneNumber": "256 781916565"
+            "phone_number": "0781916565"
         }
 
         res = self.app.post(
@@ -150,7 +150,7 @@ class TestUserAuth(BaseTestCase):
     def test_signup_with_missing_phonenumber(self):
         """Test user cannot signup with missing phonenumber field."""
 
-        self.user["phoneNumber"] = " "
+        self.user["phone_number"] = " "
         rv = self.app.post(
             'api/v1/auth/signup',
             content_type='application/json',

@@ -49,9 +49,9 @@ class UserController:
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        phoneNumber = data.get('phoneNumber')
+        phone_number = data.get('phone_number')
 
-        user = User(BaseUser(firstname, lastname, othernames, phoneNumber),
+        user = User(BaseUser(firstname, lastname, othernames, phone_number),
                     username, email, password)
         # validate user
         error = user.validate_user_input()

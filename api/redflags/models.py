@@ -1,7 +1,7 @@
 import datetime
 
 
-class BaseRedFlag:
+class BaseRedFlag(object):
     """
     A class used to represent redflag base data.
 
@@ -59,7 +59,7 @@ class BaseRedFlag:
             return "Comment field cannot be left empty."
 
 
-class RedFlag:
+class RedFlag(object):
     """
     A class used to represent a RedFlag.
 
@@ -88,13 +88,13 @@ class RedFlag:
 
     redflag_id = 1
 
-    def __init__(self, base, title, redflagType, location):
+    def __init__(self, base, title, redflag_type, location):
         """
         initialize redflag attributes
         """
         self.base = base
         self.title = title
-        self.redflagType = redflagType
+        self.redflag_type = redflag_type
         self.location = location
         self.id = RedFlag.redflag_id
         RedFlag.redflag_id += 1
@@ -106,7 +106,7 @@ class RedFlag:
         """
         if not self.title or self.title.isspace():
             return "Title field cannot be left empty."
-        if not self.redflagType or self.redflagType.isspace():
+        if not self.redflag_type or self.redflag_type.isspace():
             return "Redflag Type field cannot be left empty."
         if not self.location or self.location.isspace():
             return "Location field cannot be left empty."
@@ -121,7 +121,7 @@ class RedFlag:
             "created_on": self.base.created_on,
             "created_by": self.base.created_by,
             "title": self.title,
-            "type": self.redflagType,
+            "type": self.redflag_type,
             "location": self.location,
             "status": self.base.status,
             "Images": self.base.image,

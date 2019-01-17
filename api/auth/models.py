@@ -3,7 +3,7 @@ import datetime
 from passlib.apps import custom_app_context as pwd_context
 
 
-class BaseUser:
+class BaseUser(object):
     """
     A class used to represent user base data.
 
@@ -27,20 +27,20 @@ class BaseUser:
 
     user_id = 1
 
-    def __init__(self, firstname, lastname, othernames, phoneNumber):
+    def __init__(self, firstname, lastname, othernames, phone_number):
         """
         initialize user base attributes
         """
         self.firstname = firstname
         self.lastname = lastname
         self.othernames = othernames
-        self.phoneNumber = phoneNumber
+        self.phone_number = phone_number
         self.registered = datetime.datetime.now()
         self.id = BaseUser.user_id
         BaseUser.user_id += 1
 
 
-class User:
+class User(object):
     """
     A class used to represent a User.
 
@@ -80,7 +80,7 @@ class User:
         self.username = username
         self.email = email
         self.password = password
-        self.isAdmin = False
+        self.is_admin = False
 
     def hash_password(self, password):
         """
@@ -116,7 +116,7 @@ class User:
             return "Lastname field cannot be left empty."
         elif not self.base.othernames or self.base.othernames.isspace():
             return "Othernames field cannot be left empty."
-        elif not self.base.phoneNumber or self.base.phoneNumber.isspace():
+        elif not self.base.phone_number or self.base.phone_number.isspace():
             return "Phone number field cannot be left empty."
 
     @property
@@ -131,8 +131,8 @@ class User:
             "othernames": self.base.othernames,
             "username": self.username,
             "registered": self.base.registered,
-            "admin": self.isAdmin,
+            "admin": self.is_admin,
             "email": self.email,
             "password": self.password,
-            "phoneNumber": self.base.phoneNumber
+            "phone_number": self.base.phone_number
         }

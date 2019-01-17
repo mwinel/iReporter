@@ -13,8 +13,10 @@ app.config['JWT_SECRET_KEY'] = "you-own-your-own"
 # Auth exceptions
 @jwt.expired_token_loader
 def expired_token_callback():
-    # a callback function called when an expired token
-    # trys to access a protected api endpoint
+    """
+    a callback function called when an expired token
+    trys to access a protected api endpoint
+    """
     return jsonify({
         "status": 401,
         "message": "The token has expired, please login again."
@@ -23,8 +25,10 @@ def expired_token_callback():
 
 @jwt.invalid_token_loader
 def invalid_token_callback(callback):
-    # a callback function called when an invalid token
-    # trys to access a protected api endpoint
+    """
+    a callback function called when an invalid token
+    trys to access a protected api endpoint
+    """
     return jsonify({
         "status": 401,
         "message": "Invalid token, please login again."
@@ -33,8 +37,10 @@ def invalid_token_callback(callback):
 
 @jwt.unauthorized_loader
 def unauthorized_callback(callback):
-    # a callback function called when a request with no
-    # JWT trys to access a protected api endpoint
+    """
+    a callback function called when a request with no
+    JWT trys to access a protected api endpoint
+    """
     return jsonify({
         "status": 401,
         "message": "Missing Authorization Header."

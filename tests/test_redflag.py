@@ -77,7 +77,7 @@ class RedflagTestCase(BaseTestCase):
             data=json.dumps(self.user)
         )
         auth_token = json.loads(res.data.decode())
-        self.redflag["redflagType"] = " "
+        self.redflag["redflag_type"] = " "
         rv = self.app.post(
             '/api/v1/red-flags', 
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
