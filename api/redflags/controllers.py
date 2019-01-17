@@ -7,13 +7,31 @@ redflags = RedflagsDb()
 
 
 class RedFlagsController:
+    """
+    A class used to represent the redflags controller
+
+    ...
+
+    Methods
+    ----------
+    create_redflag
+        creates a redflag
+    fetch_all_redflags
+        returns a list of all redflags
+    update_redflag(redflag_id)
+        updates a redflag given its id
+    fetch_redflag(redflag_id)
+        returns a single redflag given its id
+    delete_redflag(redflag_id)
+        deletes a redflag from the redflags_list
+    """
 
     def create_redflag(self):
-
+        """
+        creates a redflag
+        """
         current_user = get_jwt_identity()
-        
         data = request.get_json()
-
         title = data.get('title')
         redflagType = data.get('redflagType')
         location = data.get('location')
@@ -48,6 +66,9 @@ class RedFlagsController:
         }), 201
 
     def fetch_all_redflags(self):
+        """
+        returns a list with all redflags
+        """
         all_redflags = [i.to_json for i in redflags.get_all_redflags()]
         return jsonify({
             "status": 200,
@@ -56,10 +77,12 @@ class RedFlagsController:
         }), 200
 
     def update_redflag(self, redflag_id):
+        """
+        updates a redflag given its id
+        """
         redflag = [i.to_json for i in redflags.get_all_redflags() if i.id == redflag_id]
         if redflag:
             data = request.get_json()
-
             redflag[0]['title'] = data.get('title', redflag[0]['title'])
             redflag[0]['type'] = data.get('redflagType', redflag[0]['type'])
             redflag[0]['location'] = data.get('location', redflag[0]['location'])
@@ -80,7 +103,10 @@ class RedFlagsController:
             "message": "Redflag was not found."
         }), 200
 
-    def fetch_redflag(self, redflag_id):        
+    def fetch_redflag(self, redflag_id): 
+        """
+        returns a single redflag given its id
+        """       
         redflag = [i.to_json for i in redflags.get_all_redflags() if i.id == redflag_id]
         if redflag:
             return jsonify({
@@ -94,6 +120,9 @@ class RedFlagsController:
         }), 200
 
     def delete_a_redflag(self, redflag_id):
+        """
+        deletes a redflag from a redflags_list
+        """
         for redflag in redflags.get_all_redflags():
             if redflag.id == redflag_id:
                 redflags.redflags_list.remove(redflag)
