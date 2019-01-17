@@ -70,7 +70,7 @@ Server: Werkzeug/0.14.1 Python/3.6.5
 | `/api/v1/red-flags/<id>` | `DELETE`  | Delete redflag | `TRUE` |
 
 ### UI
-[Checkout the project user interface.](https://mwinel.github.io/iReporter/UI/signup.html)
+[Checkout the app user interface.](https://mwinel.github.io/iReporter/UI/signup.html)
 
 The UI has the following necessary pages as specified below.
 
@@ -79,3 +79,7 @@ The UI has the following necessary pages as specified below.
 - [redflags page](https://mwinel.github.io/iReporter/UI/redflags.html)
 - [user profile](https://mwinel.github.io/iReporter/UI/user_profile.html)
 - [admin login](https://mwinel.github.io/iReporter/UI/admin_login.html)
+
+### Heroku url
+
+[The app is also hosted on Heroku](https://ireporter-1233.herokuapp.com/api/v1/index)
