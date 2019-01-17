@@ -82,4 +82,4 @@ The UI has the following necessary pages as specified below.
 
 ### Heroku url
 
-[The app is also hosted on Heroku](https://ireporter-1233.herokuapp.com/api/v1/index)
+[The app is also hosted on Heroku](https://ireporter-1233.herokuapp.com/api/v1)
