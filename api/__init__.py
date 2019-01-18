@@ -1,8 +1,5 @@
 """
-This file lets python treat the api directory as a package,
-creates a flask instance, creates the jwt instance, handles auth
-exception errors for jwt authentication, handles url request
-exceptions and, registers the api blueprints.
+create api package
 """
 
 from flask import Flask, jsonify
