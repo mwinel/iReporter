@@ -1,5 +1,8 @@
+"""
+tests base case
+"""
+
 import unittest
-import json
 from api import app
 
 class BaseTestCase(unittest.TestCase):
@@ -35,6 +38,6 @@ class BaseTestCase(unittest.TestCase):
             "video": "video2.mp4",
             "comment": "Alot of money has stolen since 2010."
         }
- 
+
     def tearDown(self):
         pass

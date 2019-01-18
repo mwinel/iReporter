@@ -1,3 +1,7 @@
+"""
+auth unit tests
+"""
+
 import json
 from tests.base import BaseTestCase
 
@@ -18,7 +22,7 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(result["message"] == "User successfully created.")
         self.assertTrue(rv.content_type == 'application/json')
         self.assertTrue(result['auth_token'])
-        
+
     def test_signup_user_twice(self):
         """Test user cannot signup twice."""
 
@@ -27,24 +31,13 @@ class TestUserAuth(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
-        self.assertTrue(rv.status_code, 201)                   
-
-        user2 = {
-            "firstname": "moureen",
-            "lastname": "murungi",
-            "othernames": "molly",
-            "username": "more",
-            "email": "molly@live.com",
-            "password": "654321",
-            "phone_number": "0781916565"
-        }
-
+        self.assertTrue(rv.status_code, 201)
         res = self.app.post(
             'api/v1/auth/signup',
             content_type='application/json',
-            data=json.dumps(user2)
+            data=json.dumps(self.user)
         )
-        result = json.loads(res.data.decode())               
+        result = json.loads(res.data.decode())
         self.assertTrue(res.status_code, 202)
         self.assertTrue(result["status"] == 202)
         self.assertTrue(result["message"] == "User already exists. Please login.")
@@ -54,7 +47,7 @@ class TestUserAuth(BaseTestCase):
 
         self.user["email"] = "mollylive.com"
         rv = self.app.post(
-            'api/v1/auth/signup', 
+            'api/v1/auth/signup',
             content_type='application/json',
             data=json.dumps(self.user)
         )
@@ -62,7 +55,7 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Enter a valid email address.")
-        
+
     def test_signup_with_missing_firstname(self):
         """Test user cannot signup with missing firstname field."""
 
@@ -160,7 +153,7 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
         self.assertTrue(result["error"] == "Phone number field cannot be left empty.")
-        
+
     def test_signup_with_short_password(self):
         """Test user cannot signup with short password."""
 

@@ -1,3 +1,7 @@
+"""
+redflag unit tests
+"""
+
 import json
 from tests.base import BaseTestCase
 
@@ -16,7 +20,7 @@ class RedflagTestCase(BaseTestCase):
         )
         auth_token = json.loads(res.data.decode())
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -37,7 +41,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["status"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -58,7 +62,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["title"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -79,7 +83,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["redflag_type"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -100,7 +104,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["location"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -121,7 +125,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["image"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -142,7 +146,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["video"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -163,7 +167,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["comment"] = " "
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -184,7 +188,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["image"] = "image 1"
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -205,7 +209,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
         self.redflag["video"] = "image 1"
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -226,7 +230,7 @@ class RedflagTestCase(BaseTestCase):
 
         auth_token = json.loads(res.data.decode())
         rv = self.app.get(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json'
         )
@@ -325,15 +329,16 @@ class RedflagTestCase(BaseTestCase):
         )
         auth_token = json.loads(res.data.decode())
         rv = self.app.post(
-            '/api/v1/red-flags', 
+            '/api/v1/red-flags',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag2)
         )
-        
+        self.assertTrue(rv.status_code, 201)
+
         self.redflag["title"] = "stolen Education money"
         res = self.app.put(
-            '/api/v1/red-flags/11', 
+            '/api/v1/red-flags/11',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag2)
@@ -354,7 +359,7 @@ class RedflagTestCase(BaseTestCase):
         auth_token = json.loads(res.data.decode())
 
         rv = self.app.put(
-            '/api/v1/red-flags/20000', 
+            '/api/v1/red-flags/20000',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json',
             data=json.dumps(self.redflag)
@@ -375,7 +380,7 @@ class RedflagTestCase(BaseTestCase):
 
         auth_token = json.loads(res.data.decode())
         rv = self.app.get(
-            'api/v1/users', 
+            'api/v1/users',
             headers={'Authorization': "Bearer " + auth_token['auth_token']},
             content_type='application/json'
         )
