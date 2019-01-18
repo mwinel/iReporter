@@ -1,3 +1,7 @@
+"""
+request errors
+"""
+
 from flask import request, jsonify
 
 

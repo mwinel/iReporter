@@ -1,4 +1,8 @@
-class UsersDb:
+"""
+creates and manipulates lists
+"""
+
+class UsersDb(object):
     """
     A class used to represent the users list.
 
@@ -53,7 +57,7 @@ class UsersDb:
             return None
 
 
-class RedflagsDb:
+class RedflagsDb(object):
     """
     A class used to represent the redflags list.
 

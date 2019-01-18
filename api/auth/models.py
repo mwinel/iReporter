@@ -1,6 +1,9 @@
+"""
+user models
+"""
+
 import re
 import datetime
-from passlib.apps import custom_app_context as pwd_context
 
 
 class BaseUser:
@@ -27,14 +30,14 @@ class BaseUser:
 
     user_id = 1
 
-    def __init__(self, firstname, lastname, othernames, phoneNumber):
+    def __init__(self, firstname, lastname, othernames, phone_number):
         """
         initialize user base attributes
         """
         self.firstname = firstname
         self.lastname = lastname
         self.othernames = othernames
-        self.phoneNumber = phoneNumber
+        self.phone_number = phone_number
         self.registered = datetime.datetime.now()
         self.id = BaseUser.user_id
         BaseUser.user_id += 1
@@ -80,14 +83,7 @@ class User:
         self.username = username
         self.email = email
         self.password = password
-        self.isAdmin = False
-
-    def hash_password(self, password):
-        """
-        takes in a plain password and stores
-        the hash of it with the user
-        """
-        self.password_hash = pwd_context.encrypt(password)
+        self.is_admin = False
 
     def validate_user_input(self):
         """
@@ -96,13 +92,13 @@ class User:
         """
         if not self.username or self.username.isspace():
             return "Username field cannot be left empty."
-        elif not self.email or self.email.isspace():
+        if not self.email or self.email.isspace():
             return "Email field cannot be left empty."
-        elif not self.password or self.password.isspace():
+        if not self.password or self.password.isspace():
             return "Password field cannot be left empty."
-        elif len(self.password) < 6:
+        if len(self.password) < 6:
             return "Password too short, must be atleast 6 characters or more."
-        elif not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
+        if not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
             return "Enter a valid email address."
 
     def validate_base_input(self):
@@ -112,11 +108,11 @@ class User:
         """
         if not self.base.firstname or self.base.firstname.isspace():
             return "Firstname field cannot be left empty."
-        elif not self.base.lastname or self.base.lastname.isspace():
+        if not self.base.lastname or self.base.lastname.isspace():
             return "Lastname field cannot be left empty."
-        elif not self.base.othernames or self.base.othernames.isspace():
+        if not self.base.othernames or self.base.othernames.isspace():
             return "Othernames field cannot be left empty."
-        elif not self.base.phoneNumber or self.base.phoneNumber.isspace():
+        if not self.base.phone_number or self.base.phone_number.isspace():
             return "Phone number field cannot be left empty."
 
     @property
@@ -131,8 +127,8 @@ class User:
             "othernames": self.base.othernames,
             "username": self.username,
             "registered": self.base.registered,
-            "admin": self.isAdmin,
+            "admin": self.is_admin,
             "email": self.email,
             "password": self.password,
-            "phoneNumber": self.base.phoneNumber
+            "phone_number": self.base.phone_number
         }

@@ -1,5 +1,8 @@
+"""
+tests base case
+"""
+
 import unittest
-import json
 from api import app
 
 class BaseTestCase(unittest.TestCase):
@@ -15,11 +18,11 @@ class BaseTestCase(unittest.TestCase):
             "username": "more",
             "email": "molly@live.com",
             "password": "654321",
-            "phoneNumber": "256 781916565"
+            "phone_number": "256 781916565"
         }
         self.redflag = {
             "title": "stolen HIV/AIDS money",
-            "redflagType": "red-flag",
+            "redflag_type": "red-flag",
             "location": "lat long cordinates",
             "status": "draft",
             "image": "image1.jpg",
@@ -28,13 +31,13 @@ class BaseTestCase(unittest.TestCase):
         }
         self.redflag2 = {
             "title": "stolen HIV/AIDS money",
-            "redflagType": "red-flag",
+            "redflag_type": "red-flag",
             "location": "jinja",
             "status": "draft",
             "image": "image2.jpeg",
             "video": "video2.mp4",
             "comment": "Alot of money has stolen since 2010."
         }
- 
+
     def tearDown(self):
         pass

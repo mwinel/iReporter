@@ -1,3 +1,7 @@
+"""
+user controller
+"""
+
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 from api.auth.models import User, BaseUser
@@ -49,9 +53,9 @@ class UserController:
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        phoneNumber = data.get('phoneNumber')
+        phone_number = data.get('phone_number')
 
-        user = User(BaseUser(firstname, lastname, othernames, phoneNumber),
+        user = User(BaseUser(firstname, lastname, othernames, phone_number),
                     username, email, password)
         # validate user
         error = user.validate_user_input()
@@ -73,7 +77,6 @@ class UserController:
                 "status": 202,
                 "message": "User already exists. Please login."
             }), 202
-        user.hash_password(password)
         users.add_user(user)
         auth_token = create_access_token(username)
         return jsonify({
@@ -109,3 +112,14 @@ class UserController:
             "status": 401,
             "error": "Invalid Credentials!"
         }), 401
+
+    def fetch_users(self):
+        """
+        returns a list with all users
+        """
+        all_users = [i.to_json for i in users.get_all_users()]
+        return jsonify({
+            "status": 200,
+            "message": "success",
+            "data": all_users
+        }), 200
