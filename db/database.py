@@ -1,3 +1,7 @@
+"""
+creates and manipulates lists
+"""
+
 class UsersDb(object):
     """
     A class used to represent the users list.
