@@ -97,10 +97,10 @@ class RedFlagsController:
 
             redflags.add_redflag(redflag)
             return jsonify({
-                "status": 201,
+                "status": 200,
                 "message": "Redflag successfully updated.",
                 "data": redflag
-            }), 201
+            }), 200
 
         return jsonify({
             "status": 200,
