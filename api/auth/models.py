@@ -3,7 +3,7 @@ import datetime
 from passlib.apps import custom_app_context as pwd_context
 
 
-class BaseUser(object):
+class BaseUser:
     """
     A class used to represent user base data.
 
@@ -40,7 +40,7 @@ class BaseUser(object):
         BaseUser.user_id += 1
 
 
-class User(object):
+class User:
     """
     A class used to represent a User.
 
@@ -96,13 +96,13 @@ class User(object):
         """
         if not self.username or self.username.isspace():
             return "Username field cannot be left empty."
-        elif not self.email or self.email.isspace():
+        if not self.email or self.email.isspace():
             return "Email field cannot be left empty."
-        elif not self.password or self.password.isspace():
+        if not self.password or self.password.isspace():
             return "Password field cannot be left empty."
-        elif len(self.password) < 6:
+        if len(self.password) < 6:
             return "Password too short, must be atleast 6 characters or more."
-        elif not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
+        if not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
             return "Enter a valid email address."
 
     def validate_base_input(self):
@@ -112,11 +112,11 @@ class User(object):
         """
         if not self.base.firstname or self.base.firstname.isspace():
             return "Firstname field cannot be left empty."
-        elif not self.base.lastname or self.base.lastname.isspace():
+        if not self.base.lastname or self.base.lastname.isspace():
             return "Lastname field cannot be left empty."
-        elif not self.base.othernames or self.base.othernames.isspace():
+        if not self.base.othernames or self.base.othernames.isspace():
             return "Othernames field cannot be left empty."
-        elif not self.base.phone_number or self.base.phone_number.isspace():
+        if not self.base.phone_number or self.base.phone_number.isspace():
             return "Phone number field cannot be left empty."
 
     @property

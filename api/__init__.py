@@ -16,6 +16,7 @@ def expired_token_callback():
     """
     a callback function called when an expired token
     trys to access a protected api endpoint
+    returns: error message
     """
     return jsonify({
         "status": 401,
@@ -24,26 +25,30 @@ def expired_token_callback():
 
 
 @jwt.invalid_token_loader
-def invalid_token_callback(callback):
+def invalid_token_callback(invalid_token_msg):
     """
     a callback function called when an invalid token
     trys to access a protected api endpoint
+    returns: invalid_token_msg
     """
+    invalid_token_msg = "Invalid token, please login again."
     return jsonify({
         "status": 401,
-        "message": "Invalid token, please login again."
+        "message": invalid_token_msg
     }), 401
 
 
 @jwt.unauthorized_loader
-def unauthorized_callback(callback):
+def unauthorized_callback(unauthorized_msg):
     """
     a callback function called when a request with no
     JWT trys to access a protected api endpoint
+    returns: unauthorized_msg
     """
+    unauthorized_msg = "Missing Authorization Header."
     return jsonify({
         "status": 401,
-        "message": "Missing Authorization Header."
+        "message": unauthorized_msg
     }), 401
 
 

@@ -1,7 +1,7 @@
 import datetime
 
 
-class BaseRedFlag(object):
+class BaseRedFlag:
     """
     A class used to represent redflag base data.
 
@@ -59,7 +59,7 @@ class BaseRedFlag(object):
             return "Comment field cannot be left empty."
 
 
-class RedFlag(object):
+class RedFlag:
     """
     A class used to represent a RedFlag.
 
