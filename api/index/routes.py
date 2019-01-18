@@ -1,10 +1,12 @@
+from flask import Blueprint
 from flask import jsonify
-from api.index import api
+
+index = Blueprint('index', __name__)
 
 
-@api.route("/", methods=['GET'])
-@api.route("/index", methods=['GET'])
-def index():
+@index.route("/", methods=['GET'])
+@index.route("/index", methods=['GET'])
+def welcome():
     return jsonify({
         "status": 200,
         "message": "Welcome to iReporter.",

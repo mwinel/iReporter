@@ -1,8 +1,8 @@
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
-from api.index import api as index_blueprint
-from api.auth import api as auth_blueprint
-from api.redflags import api as redflags_blueprint
+from api.index.routes import index as index_blueprint
+from api.auth.routes import auth as auth_blueprint
+from api.redflags.routes import redflags as redflags_blueprint
 from api.errors.request_errors import RequestError
 
 app = Flask(__name__)

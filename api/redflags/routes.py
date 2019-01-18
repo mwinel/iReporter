@@ -1,11 +1,12 @@
+from flask import Blueprint
 from flask_jwt_extended import jwt_required
-from api.redflags import api
 from api.redflags.controllers import RedFlagsController
 
+redflags = Blueprint('redflags', __name__)
 redflags_controller = RedFlagsController()
 
 
-@api.route("/red-flags", methods=['POST'])
+@redflags.route("/red-flags", methods=['POST'])
 @jwt_required
 def create_redflag():
     """
@@ -14,7 +15,7 @@ def create_redflag():
     return redflags_controller.create_redflag()
 
 
-@api.route("/red-flags", methods=["GET"])
+@redflags.route("/red-flags", methods=["GET"])
 @jwt_required
 def get_redflags():
     """
@@ -23,7 +24,7 @@ def get_redflags():
     return redflags_controller.fetch_all_redflags()
 
 
-@api.route("/red-flags/<int:redflag_id>", methods=["PUT"])
+@redflags.route("/red-flags/<int:redflag_id>", methods=["PUT"])
 @jwt_required
 def edit_redflag(redflag_id):
     """
@@ -32,7 +33,7 @@ def edit_redflag(redflag_id):
     return redflags_controller.update_redflag(redflag_id)
 
 
-@api.route("/red-flags/<int:redflag_id>", methods=["GET"])
+@redflags.route("/red-flags/<int:redflag_id>", methods=["GET"])
 @jwt_required
 def get_redflag(redflag_id):
     """
@@ -41,7 +42,7 @@ def get_redflag(redflag_id):
     return redflags_controller.fetch_redflag(redflag_id)
 
 
-@api.route("/red-flags/<int:redflag_id>", methods=["DELETE"])
+@redflags.route("/red-flags/<int:redflag_id>", methods=["DELETE"])
 @jwt_required
 def delete_redflag(redflag_id):
     """
