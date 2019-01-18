@@ -7,6 +7,9 @@ index = Blueprint('index', __name__)
 @index.route("/", methods=['GET'])
 @index.route("/index", methods=['GET'])
 def welcome():
+    """
+    returns a welcome message
+    """
     return jsonify({
         "status": 200,
         "message": "Welcome to iReporter.",
