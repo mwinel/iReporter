@@ -1,6 +1,5 @@
 import re
 import datetime
-from passlib.apps import custom_app_context as pwd_context
 
 
 class BaseUser:
@@ -81,13 +80,6 @@ class User:
         self.email = email
         self.password = password
         self.is_admin = False
-
-    def hash_password(self, password):
-        """
-        takes in a plain password and stores
-        the hash of it with the user
-        """
-        self.password_hash = pwd_context.encrypt(password)
 
     def validate_user_input(self):
         """

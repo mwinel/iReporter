@@ -73,7 +73,6 @@ class UserController:
                 "status": 202,
                 "message": "User already exists. Please login."
             }), 202
-        user.hash_password(password)
         users.add_user(user)
         auth_token = create_access_token(username)
         return jsonify({
