@@ -1,3 +1,7 @@
+"""
+user controller
+"""
+
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 from api.auth.models import User, BaseUser

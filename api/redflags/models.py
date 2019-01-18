@@ -1,3 +1,7 @@
+"""
+Redflag models
+"""
+
 import datetime
 
 

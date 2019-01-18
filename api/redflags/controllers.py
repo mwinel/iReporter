@@ -1,3 +1,7 @@
+"""
+Redflag controller
+"""
+
 from flask import request, jsonify
 from flask_jwt_extended import get_jwt_identity
 from api.redflags.models import RedFlag, BaseRedFlag

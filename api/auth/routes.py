@@ -1,3 +1,7 @@
+"""
+user auth routes
+"""
+
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from api.auth.controllers import UserController

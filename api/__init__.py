@@ -1,3 +1,13 @@
+"""
+This file lets python treat the api directory as a package.
+
+- creates a flask instance
+- creates the jwt instance
+- handles auth exception error for jwt authentication
+- handles url request exceptions and,
+- registers the api blueprints
+"""
+
 from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager
 from api.index.routes import index as index_blueprint
