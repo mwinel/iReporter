@@ -1,31 +1,12 @@
 """
 user controller
 """
-
+import datetime
 from flask import request, jsonify
-# from flask_jwt_extended import create_access_token
 from api.auth.models import User
-from db.database import DbConnection
+from db.database import DatabaseConnection
 
-db = DbConnection()
-
-
-# def get_user_by_username(username):
-#     """
-#     gets a user by username
-#     returns: user
-#     """
-#     user = users.find_user_by_username(username)
-#     return user
-
-
-# def check_login_credentials(username, password):
-#     """
-#     checks for user login credentials
-#     returns: user
-#     """
-#     user = users.check_user(username, password)
-#     return user
+db = DatabaseConnection()
 
 
 class UserController:
@@ -38,8 +19,6 @@ class UserController:
     ----------
     create_user
         creates user account
-    user_login
-        logs in the user given the username and password
     """
 
     def create_user(self):
@@ -54,70 +33,11 @@ class UserController:
         email = data.get('email')
         password = data.get('password')
         phone_number = data.get('phone_number')
-
-        user = User(firstname, lastname, othernames, username, email, password, phone_number)
-#         # validate user
-#         error = user.validate_user_input()
-#         base_error = user.validate_base_input()
-#         if error:
-#             return jsonify({
-#                 "status": 400,
-#                 "error": error
-#             }), 400
-#         if base_error:
-#             return jsonify({
-#                 "status": 400,
-#                 "error": base_error
-#             }), 400
-#         # check if user exists
-#         user_exists = users.find_user_by_username(username)
-#         if user_exists:
-#             return jsonify({
-#                 "status": 202,
-#                 "message": "User already exists. Please login."
-#             }), 202
-        db.insert_user_data(firstname, lastname, othernames, username, email, password, phone_number)
-
+        created_on = datetime.datetime.now()
+        user = db.insert_user_data(firstname, lastname, othernames, username, email,
+                            password, phone_number, created_on)
         return jsonify({
             "status": 201,
             "message": "User successfully created.",
-            "data": user.__dict__
+            "data": user
         }), 201
-
-#     def user_login(self):
-#         """
-#         logs in the user
-#         """
-#         data = request.get_json()
-#         username = data.get('username')
-#         password = data.get('password')
-#         current_user = get_user_by_username(username)
-#         if not current_user:
-#             return jsonify({
-#                 "status": 200,
-#                 "error": "User does not exist."
-#             }), 200
-#         # check for login credentials
-#         check_credentials = check_login_credentials(username, password)
-#         if check_credentials:
-#             auth_token = create_access_token(identity=username)
-#             return jsonify({
-#                 "status": 200,
-#                 "message": "Successfully logged in.",
-#                 "access_token": auth_token
-#             }), 200
-#         return jsonify({
-#             "status": 401,
-#             "error": "Invalid Credentials!"
-#         }), 401
-
-#     def fetch_users(self):
-#         """
-#         returns a list with all users
-#         """
-#         all_users = [i.to_json for i in users.get_all_users()]
-#         return jsonify({
-#             "status": 200,
-#             "message": "success",
-#             "data": all_users
-#         }), 200
