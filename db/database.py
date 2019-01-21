@@ -1,88 +1,65 @@
-"""
-creates and manipulates lists
-"""
+import os
+from pprint import pprint
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
-class UsersDb(object):
+
+class DbConnection:
     """
-    A class used to represent the users list.
-
-    Methods
-    -------
-    add_user(user)
-        appends user to the users_list
-    get_all_users
-        returns a list with all users
-    find_user_by_username(username)
-        finds the user given their username
-    check_user(username, password)
-        checks for the user in the users_list
+    This class represents the database connection
     """
 
     def __init__(self):
         """
-        initialize the users list
+        initialize database connection
         """
-        self.users_list = []
+        if os.getenv('DB_NAME') == 'test_ireporter':
+            self.db_name = 'test_ireporter'
+        else:
+            self.db_name = 'ireporter'
+        pprint(self.db_name)
+        self.connection = psycopg2.connect(
+            dbname=self.db_name,
+            user="murungi",
+            password="myPassword",
+            port="5432"
+        )
+        self.connection.autocommit = True
+        self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
+        pprint("Successfully connected to the database.")
 
-    def add_user(self, user):
+    def create_tables(self):
         """
-        appends user to the users_list
+        creates all database tables
         """
-        self.users_list.append(user)
+        with open('db/schema.sql') as tables:
+            self.cursor.execute(tables.read())
 
-    def get_all_users(self):
+    def insert_user_data(self, firstname, lastname, othernames, username, email, password, phone_number):
         """
-        returns a list with all users
+        insert user data into the database
         """
-        return self.users_list
+        # firstname = args[1]
+        # lastname = args[2]
+        # othernames = args[3]
+        # username = args[4]
+        # email = args[5]
+        # password = args[6]
+        # phone_number = args[7]
+        
+        self.cursor.execute(
+            """
+            INSERT INTO users (firstname, lastname, othernames, username, email, password, phone_number)
+            VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')
+            """.format(firstname, lastname, othernames, username, email, password, phone_number)
+        )
+        # user_id = self.cursor.fetchone()[0]
 
-    def find_user_by_username(self, username):
+    def drop_tables(self):
         """
-        finds the user given their username
-        returns: user
+        drop all tables
         """
-        for user in self.users_list:
-            if user.username == username:
-                return user
-        return None
-
-    def check_user(self, username, password):
-        """
-        finds the user given their username and password
-        returns: user
-        """
-        for user in self.users_list:
-            if username == user.username and password == user.password:
-                return user
-            return None
-
-
-class RedflagsDb(object):
-    """
-    A class used to represent the redflags list.
-
-    Methods
-    -------
-    add_redflag(redflag)
-        appends a redflag to the redflag_list
-    get_all_redflags
-        returns a list with all redflags
-    """
-
-    def __init__(self):
-        """
-        initialize the redflags list
-        """
-        self.redflags_list = []
-
-    def add_redflag(self, redflag):
-        """
-        appends a redflag to the redflags_list
-        """
-        self.redflags_list.append(redflag)
-
-    def get_all_redflags(self):
-        """
-        returns a list with all redflags
-        """
-        return self.redflags_list
+        drop_query = "DROP TABLE IF EXISTS {0} CASCADE"
+        tables = ["users"]
+        for table in tables:
+            self.cursor.execute(drop_query.format(table))

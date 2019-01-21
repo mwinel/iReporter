@@ -4,6 +4,7 @@ tests base case
 
 import unittest
 from api import app
+from db.database import DbConnection
 
 class BaseTestCase(unittest.TestCase):
     """Tests base case."""
@@ -11,6 +12,7 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         """Define tests variables and initialize the app."""
         self.app = app.test_client()
+        self.db = DbConnection()
         self.user = {
             "firstname": "moureen",
             "lastname": "murungi",
@@ -40,4 +42,4 @@ class BaseTestCase(unittest.TestCase):
         }
 
     def tearDown(self):
-        pass
+        self.db.drop_tables()
