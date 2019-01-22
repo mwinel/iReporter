@@ -3,7 +3,7 @@ user controller
 """
 import datetime
 from flask import request, jsonify
-from api.auth.models import User
+from api.auth.models import User, BaseUser
 from db.database import DatabaseConnection
 
 db = DatabaseConnection()
@@ -35,8 +35,8 @@ class UserController:
         phone_number = data.get('phone_number')
         created_on = datetime.datetime.now()
 
-        user = User(firstname, lastname, othernames, username,
-                    email, password, phone_number)
+        user = User(BaseUser(firstname, lastname, othernames, phone_number), username,
+                    email, password)
         # validate user
         validate_input = user.validate_user_input()
         validate_email = user.validate_user_email()
