@@ -75,6 +75,14 @@ class DatabaseConnection:
         user = self.cursor.fetchone()
         return user
 
+    def fetch_all(self, table):
+        """
+        returns all rows from a table
+        """
+        self.cursor.execute("""SELECT * FROM {};""".format(table))
+        rows = self.cursor.fetchall()
+        return rows
+
     def get_by_argument(self, table, column, argument):
         """
         returns data by argument
@@ -86,6 +94,13 @@ class DatabaseConnection:
         )
         result = self.cursor.fetchone()
         return result
+
+    def delete_by_argument(self, table, column, argument):
+        """
+        deletes a rows by argument
+        """
+        self.cursor.execute("DELETE FROM {} WHERE {} = '{}'").format(
+            table, column, argument)
 
     def drop_tables(self):
         """
