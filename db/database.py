@@ -56,8 +56,8 @@ class DatabaseConnection:
             INSERT INTO users(firstname, lastname, othernames,
                               username, email, password, phone_number, created_on)
             VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
-            RETURNING user_id, firstname, lastname, othernames, 
-            username, email, phone_number, created_on;
+            RETURNING user_id, firstname, lastname, othernames,
+            username, email, phone_number, is_admin, created_on;
             """.format(firstname, lastname, othernames, username,
                        email, password, phone_number, created_on)
         )

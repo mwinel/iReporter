@@ -22,6 +22,6 @@ class BaseTestCase(unittest.TestCase):
             "password": "654321",
             "phone_number": "256 781916565"
         }
-        
+
     def tearDown(self):
         self.db.drop_tables()
