@@ -5,3 +5,5 @@ __pycache__
 htmlcov
 .coverage
 .pytest_cache/
+.prod_env
+.test_env
