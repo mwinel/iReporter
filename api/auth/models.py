@@ -1,7 +1,6 @@
 """
 user models
 """
-import re
 
 
 class BaseUser:
@@ -65,39 +64,3 @@ class User:
         self.username = username
         self.email = email
         self.password = password
-
-    def validate_user_email(self):
-        """
-        validates user email
-        returns: error message
-        """
-        if not self.email or self.email.isspace():
-            return "Email field cannot be left empty."
-        if not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", self.email):
-            return "Enter a valid email address."
-
-    def validate_user_password(self):
-        """
-        validates user password
-        returns: error message
-        """
-        if not self.password or self.password.isspace():
-            return "Password field cannot be left empty."
-        if len(self.password) < 6:
-            return "Password too short, must be atleast 6 characters or more."
-
-    def validate_user_input(self):
-        """
-        validates user input
-        returns: error message
-        """
-        if not self.username or self.username.isspace():
-            return "Username field cannot be left empty."
-        if not self.base.firstname or self.base.firstname.isspace():
-            return "Firstname field cannot be left empty."
-        if not self.base.lastname or self.base.lastname.isspace():
-            return "Lastname field cannot be left empty."
-        if not self.base.othernames or self.base.othernames.isspace():
-            return "Othernames field cannot be left empty."
-        if not self.base.phone_number or self.base.phone_number.isspace():
-            return "Phone number field cannot be left empty."
