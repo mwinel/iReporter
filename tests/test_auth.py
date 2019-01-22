@@ -237,3 +237,20 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(res.status_code, 401)
         self.assertTrue(result["status"] == 401)
         self.assertTrue(result["error"] == "Invalid Credentials!")
+
+    def test_get_all_users(self):
+        """Test is API returns a list of users."""
+
+        # self.user["username"] = "paulk"
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.get(
+            'api/v2/users',
+            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            content_type='application/json'
+        )
+        self.assertTrue(rv.status_code, 200)

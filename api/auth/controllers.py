@@ -2,11 +2,13 @@
 user controller
 """
 import datetime
-from flask import request, jsonify
-from api.auth.models import User, BaseUser
+from flask import request, jsonify, make_response
 from db.database import DatabaseConnection
+from api.auth.validators import UserValidations
+from api.auth.helpers import encode_auth_token
 
 db = DatabaseConnection()
+user_validations = UserValidations()
 
 
 class UserController:
@@ -36,13 +38,11 @@ class UserController:
         password = data.get('password')
         phone_number = data.get('phone_number')
         created_on = datetime.datetime.now()
-
-        user = User(BaseUser(firstname, lastname, othernames, phone_number), username,
-                    email, password)
-        # validate user
-        validate_input = user.validate_user_input()
-        validate_email = user.validate_user_email()
-        validate_password = user.validate_user_password()
+        # validate user input
+        validate_input = user_validations.validate_user_input(username, firstname, lastname,
+                                                              othernames, phone_number)
+        validate_email = user_validations.validate_user_email(email)
+        validate_password = user_validations.validate_user_password(password)
         if validate_input:
             return jsonify({
                 "status": 400,
@@ -86,13 +86,20 @@ class UserController:
                 "status": 200,
                 "error": "User does not exist. Please signup."
             }), 200
-        check_user = db.check_login_credentials(username, password)
-        if check_user:
-            return jsonify({
+        user = db.check_login_credentials(username, password)
+        if user:
+            auth_token = encode_auth_token(username).decode('utf-8')
+            response = {
                 "status": 200,
-                "message": "Successfully logged in."
-            }), 200
+                "message": "Successfully logged in.",
+                "access_token": auth_token
+            }
+            return make_response(jsonify(response)), 200
         return jsonify({
             "status": 401,
-            "error": "Invalid Credentials!"
+            "error": "Invalid Credentials!",
         }), 401
+
+    def get_users(self):
+        users = db.fetch_all('users')
+        return jsonify(users=users), 200
