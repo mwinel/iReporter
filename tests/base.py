@@ -5,6 +5,7 @@ import unittest
 from api import app
 from db.database import DatabaseConnection
 
+
 class BaseTestCase(unittest.TestCase):
     """Tests base case."""
 

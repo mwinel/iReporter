@@ -19,6 +19,8 @@ class UserController:
     ----------
     create_user
         creates user account
+    user_login
+        logs in a registered user
     """
 
     def create_user(self):
@@ -70,3 +72,27 @@ class UserController:
             "message": "User successfully created.",
             "data": add_user
         }), 201
+
+    def user_login(self):
+        """
+        logs in a registered user
+        """
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        current_user = db.get_by_argument('users', 'username', username)
+        if not current_user:
+            return jsonify({
+                "status": 200,
+                "error": "User does not exist. Please signup."
+            }), 200
+        check_user = db.check_login_credentials(username, password)
+        if check_user:
+            return jsonify({
+                "status": 200,
+                "message": "Successfully logged in."
+            }), 200
+        return jsonify({
+            "status": 401,
+            "error": "Invalid Credentials!"
+        }), 401

@@ -64,6 +64,17 @@ class DatabaseConnection:
         user = self.cursor.fetchone()
         return user
 
+    def check_login_credentials(self, username, password):
+        """
+        checks for user login credentials
+        """
+        user_query = """
+            SELECT username, password FROM users\
+            WHERE username = '{}' AND password = '{}'""".format(username, password)
+        self.cursor.execute(user_query)
+        user = self.cursor.fetchone()
+        return user
+
     def get_by_argument(self, table, column, argument):
         """
         returns data by argument

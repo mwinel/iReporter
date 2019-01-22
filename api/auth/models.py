@@ -101,4 +101,3 @@ class User:
             return "Othernames field cannot be left empty."
         if not self.base.phone_number or self.base.phone_number.isspace():
             return "Phone number field cannot be left empty."
-       

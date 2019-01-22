@@ -4,6 +4,7 @@ auth unit tests
 import json
 from tests.base import BaseTestCase
 
+
 class TestUserAuth(BaseTestCase):
     """Test auth api endpoints."""
 
@@ -37,7 +38,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(res.data.decode())
         self.assertTrue(res.status_code, 202)
         self.assertTrue(result["status"] == 202)
-        self.assertTrue(result["message"] == "User already exists. Please login.")
+        self.assertTrue(result["message"] ==
+                        "User already exists. Please login.")
 
     def test_signup_with_invalid_email(self):
         """Test user cannot signup with an invalid email."""
@@ -65,7 +67,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] == "Firstname field cannot be left empty.")
+        self.assertTrue(result["error"] ==
+                        "Firstname field cannot be left empty.")
 
     def test_signup_with_missing_lastname(self):
         """Test user cannot signup with missing lastname field."""
@@ -79,7 +82,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] == "Lastname field cannot be left empty.")
+        self.assertTrue(result["error"] ==
+                        "Lastname field cannot be left empty.")
 
     def test_signup_with_missing_username(self):
         """Test user cannot signup with missing username field."""
@@ -93,7 +97,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] == "Username field cannot be left empty.")
+        self.assertTrue(result["error"] ==
+                        "Username field cannot be left empty.")
 
     def test_signup_with_missing_email(self):
         """Test user cannot signup with missing lastname field."""
@@ -121,7 +126,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] == "Password field cannot be left empty.")
+        self.assertTrue(result["error"] ==
+                        "Password field cannot be left empty.")
 
     def test_signup_with_missing_othernames(self):
         """Test user cannot signup with missing othernames field."""
@@ -135,7 +141,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] == "Othernames field cannot be left empty.")
+        self.assertTrue(result["error"] ==
+                        "Othernames field cannot be left empty.")
 
     def test_signup_with_missing_phonenumber(self):
         """Test user cannot signup with missing phonenumber field."""
@@ -149,7 +156,8 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] == "Phone number field cannot be left empty.")
+        self.assertTrue(result["error"] ==
+                        "Phone number field cannot be left empty.")
 
     def test_signup_with_short_password(self):
         """Test user cannot signup with short password."""
@@ -165,3 +173,67 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(result["status"] == 400)
         self.assertTrue(
             result["error"] == "Password too short, must be atleast 6 characters or more.")
+
+    def test_login_for_registered_user(self):
+        """Test registered user can successfully login."""
+
+        registered_user = {
+            "username": "more",
+            "password": "654321"
+        }
+        # signup user
+        rv = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        self.assertTrue(rv.status_code, 201)
+        # Login registered user
+        res = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps(registered_user)
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 200)
+        self.assertTrue(result["message"] == "Successfully logged in.")
+
+    def test_login_for_non_registered_user(self):
+        """Test non registered user cannot successfully login."""
+
+        non_registered_user = {
+            "username": "isaac",
+            "password": "123456"
+        }
+        # Login registered user
+        res = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps(non_registered_user)
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 200)
+        self.assertTrue(result["error"] ==
+                        "User does not exist. Please signup.")
+
+    def test_user_login_with_invalid_credentials(self):
+        """Test user cannot successfully login with invalid credentials."""
+
+        # Register user
+        rv = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 201)
+        # Login registered user
+        res = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps({"username": "more", "password": "654329"})
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 401)
+        self.assertTrue(result["status"] == 401)
+        self.assertTrue(result["error"] == "Invalid Credentials!")
