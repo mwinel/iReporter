@@ -1,7 +1,6 @@
 """
 database class
 """
-
 import os
 from pprint import pprint
 import psycopg2
@@ -24,7 +23,7 @@ class DatabaseConnection:
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="jenny",
+            user="murungi",
             password="myPassword",
             host="localhost",
             port="5432"
@@ -56,7 +55,9 @@ class DatabaseConnection:
             """
             INSERT INTO users(firstname, lastname, othernames,
                               username, email, password, phone_number, created_on)
-            VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}') RETURNING *;
+            VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+            RETURNING user_id, firstname, lastname, othernames, 
+            username, email, phone_number, created_on;
             """.format(firstname, lastname, othernames, username,
                        email, password, phone_number, created_on)
         )

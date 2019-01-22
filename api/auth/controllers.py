@@ -3,7 +3,6 @@ user controller
 """
 import datetime
 from flask import request, jsonify
-from api.auth.models import User
 from db.database import DatabaseConnection
 
 db = DatabaseConnection()
