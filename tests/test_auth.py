@@ -241,16 +241,44 @@ class TestUserAuth(BaseTestCase):
     def test_get_all_users(self):
         """Test is API returns a list of users."""
 
-        # self.user["username"] = "paulk"
+        # signup user
         res = self.app.post(
             'api/v2/auth/signup',
             content_type='application/json',
             data=json.dumps(self.user)
         )
-        auth_token = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 201)
+        # login user
+        response = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps({"username": "more", "password": "654321"})
+        )
+        auth_token = json.loads(response.data.decode())
         rv = self.app.get(
             'api/v2/users',
-            headers={'Authorization': "Bearer " + auth_token['auth_token']},
+            headers={'Authorization': auth_token['access_token']},
             content_type='application/json'
         )
         self.assertTrue(rv.status_code, 200)
+
+    def test_get_all_users_with_invalid_token(self):
+        """Test is API cannit returns list of users with invalid token."""
+
+        rv = self.app.get(
+            'api/v2/users',
+            headers={'Authorization': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDg\
+                                       yMzM5NDMsImlhdCI6MTU0ODIzMzg4Mywic3ViIjoibXdpbmVsIn0.\
+                                       JOegZPMtfiuoSjddQ-XfJabF232K5mR7N9Bju_yeoY"},
+            content_type='application/json'
+        )
+        self.assertTrue(rv.status_code, 401)
+
+    def test_get_all_users_with_missing_token(self):
+        """Test is API cannit returns list of users with missing token."""
+
+        rv = self.app.get(
+            'api/v2/users',
+            content_type='application/json'
+        )
+        self.assertTrue(rv.status_code, 401)

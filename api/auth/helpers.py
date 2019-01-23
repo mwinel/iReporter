@@ -5,6 +5,14 @@ import datetime
 from functools import wraps
 import jwt
 from flask import request, jsonify
+from db.database import DatabaseConnection
+
+db = DatabaseConnection()
+
+
+def get_user(username):
+    user = db.get_by_argument('users', 'username', username)
+    return user
 
 
 def encode_auth_token(username):
@@ -15,7 +23,7 @@ def encode_auth_token(username):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=15),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=60),
             'iat': datetime.datetime.utcnow(),
             'sub': username
         }
@@ -27,43 +35,32 @@ def encode_auth_token(username):
     except Exception as e:
         return e
 
-def decode_auth_token(auth_token):
-    """
-    decodes auth token
-    param: auth_token
-    returns: string
-    """
-    try:
-        payload = jwt.decode(auth_token, 'some-boy-just-went-mad-coding', algorithms='HS256')
-        return payload['sub']
-    except jwt.ExpiredSignatureError:
-        return 'Token Expired. Please login again.'
-    except jwt.InvalidTokenError:
-        return 'Invalid Token. Please login again.'
 
 def token_required(f):
     """
-    decorator function to protect api endpoints
+    decorator to protect api endpoints
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        auth_token = None
-
-        if 'Authorization' in request.headers:
-            auth_header = request.headers['Authorization']
-            try:
-                auth_token = auth_header.split(" ")[1]
-            except IndexError:
-                return "Provide a valid token"
-        if not auth_token:
-            return "Token is missing"
+        if 'Authorization' not in request.headers:
+            return jsonify({
+                "status": 401,
+                "error": "Missing Authorization Header"
+            }), 401
+        auth_token = request.headers['Authorization']
         try:
-            decode_token = decode_auth_token(auth_token)
-        except:
-            message = "Invalid token"
-            if isinstance(decode_token, str):
-                message = decode_token
-            return jsonify(message)
-
-        return f(*args, **kwargs)
+            identinty = jwt.decode(
+                auth_token, 'some-boy-just-went-mad-coding')
+            current_user = get_user(username=identinty['sub'])
+        except jwt.ExpiredSignatureError:
+            return jsonify({
+                "status": 401,
+                "error": "Token expired. Please login again."
+            }), 401
+        except jwt.InvalidSignatureError:
+            return jsonify({
+                "status": 401,
+                "error": "Invalid Token. Please login again."
+            }), 401
+        return f(current_user, *args, **kwargs)
     return decorated

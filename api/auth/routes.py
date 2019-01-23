@@ -27,7 +27,7 @@ def login():
 
 @auth.route("/users", methods=['GET'])
 @token_required
-def get_users():
+def get_users(current_user):
     """
     api endpoint to return users
     """
