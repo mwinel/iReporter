@@ -23,8 +23,7 @@ class DatabaseConnection:
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="murungi",
-            password="myPassword",
+            user="postgres",
             host="localhost",
             port="5432"
         )
