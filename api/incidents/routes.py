@@ -16,3 +16,11 @@ def create_redflag(current_user):
     api endpoint to create redflag
     """
     return incidents_controller.create_incident(current_user)
+
+
+@incidents.route("/red-flags", methods=["GET"])
+def get_redflags():
+    """
+    api endpoint to fetch redflags
+    """
+    return incidents_controller.fetch_redflags()

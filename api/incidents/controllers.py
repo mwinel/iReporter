@@ -66,3 +66,12 @@ class IncidentsController:
             "message": "Incident successfully created.",
             "data": incident
         }), 201
+
+    def fetch_redflags(self):
+        incident_type = 'red-flag'
+        redflags = db.get_all_by_argument('incidents', 'incident_type', incident_type)
+        return jsonify({
+            "status": 200,
+            "redflags": redflags,
+            "message": "success"
+        }), 200

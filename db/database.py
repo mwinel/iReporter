@@ -117,6 +117,18 @@ class DatabaseConnection:
         result = self.cursor.fetchone()
         return result
 
+    def get_all_by_argument(self, table, column, argument):
+        """
+        returns a list of rows by argument
+        """
+        self.cursor.execute(
+            """
+            SELECT * FROM {} WHERE {} = '{}'
+            """.format(table, column, argument)
+        )
+        result = self.cursor.fetchall()
+        return result
+
     def delete_by_argument(self, table, column, argument):
         """
         deletes a rows by argument
