@@ -3,7 +3,7 @@ user auth routes
 """
 from flask import Blueprint
 from api.auth.controllers import UserController
-from api.auth.helpers import encode_auth_token, token_required
+from api.auth.helpers import token_required
 
 auth = Blueprint('auth', __name__)
 user_controller = UserController()

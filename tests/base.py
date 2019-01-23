@@ -23,6 +23,14 @@ class BaseTestCase(unittest.TestCase):
             "password": "654321",
             "phone_number": "256 781916565"
         }
+        self.redflag = {
+            "incident_type": "red-flag",
+            "location": "lat long cordinates",
+            "status": "draft",
+            "image": "girl-ethiopian-child-portrait-38634.jpeg",
+            "video": "girl-ethiopian-child-portrait-38634.mkv",
+            "comment": "Alot of money has stolen since 2010."
+        }
 
     def tearDown(self):
         self.db.drop_tables()

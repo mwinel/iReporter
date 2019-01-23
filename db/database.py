@@ -23,7 +23,8 @@ class DatabaseConnection:
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="postgres",
+            user="murungi",
+            password="myPassword",
             host="localhost",
             port="5432"
         )
@@ -74,6 +75,29 @@ class DatabaseConnection:
         user = self.cursor.fetchone()
         return user
 
+    def insert_incident_data(self, *args):
+        """
+        insert incidents data into table
+        """
+        incident_type = args[0]
+        location = args[1]
+        status = args[2]
+        images = args[3]
+        videos = args[4]
+        comment = args[5]
+        created_on = args[6]
+        created_by = args[7]
+        self.cursor.execute(
+            """
+            INSERT INTO incidents(incident_type, location, status, images,
+                                  videos, comment, created_on, created_by)
+            VALUES('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}') RETURNING *;
+            """.format(incident_type, location, status, images,
+                       videos, comment, created_on, created_by)
+        )
+        incident = self.cursor.fetchone()
+        return incident
+
     def fetch_all(self, table):
         """
         returns all rows from a table
@@ -106,6 +130,6 @@ class DatabaseConnection:
         drop all tables
         """
         drop_query = "DROP TABLE IF EXISTS {0} CASCADE"
-        tables = ["users"]
+        tables = ["users", "incidents"]
         for table in tables:
             self.cursor.execute(drop_query.format(table))
