@@ -1,8 +1,6 @@
 """
 user models
 """
-
-
 class BaseUser:
     """
     A class used to represent a BaseUser.
