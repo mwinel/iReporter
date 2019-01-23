@@ -1,7 +1,7 @@
 from api import app
-from db.database import DbConnection
+from db.database import DatabaseConnection
 
-db = DbConnection()
+db = DatabaseConnection()
 
 if __name__ == "__main__":
     db.create_tables()

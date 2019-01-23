@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(200),
     phone_number VARCHAR(20),
     is_admin BOOLEAN DEFAULT FALSE,
-    created_on TIMESTAMPTZ
+    created_on TEXT
 );
