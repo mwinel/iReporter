@@ -67,10 +67,12 @@ class UserController:
             }), 202
         add_user = db.insert_user_data(firstname, lastname, othernames, username, email,
                                        password, phone_number, created_on)
+        auth_token = encode_auth_token(username).decode('utf-8')
         return jsonify({
             "status": 201,
             "message": "User successfully created.",
-            "data": add_user
+            "data": add_user,
+            "access_token": auth_token
         }), 201
 
     def user_login(self):
