@@ -10,6 +10,12 @@ db = DatabaseConnection()
 incident_validations = IncidentValidations()
 
 
+def get_by_redflag_type():
+    incident_type = 'red-flag'
+    redflags = db.get_all_by_argument('incidents', 'incident_type', incident_type)
+    return redflags
+
+
 class IncidentsController:
     """
     A class used to represent the incidents controller
@@ -68,10 +74,29 @@ class IncidentsController:
         }), 201
 
     def fetch_redflags(self):
-        incident_type = 'red-flag'
-        redflags = db.get_all_by_argument('incidents', 'incident_type', incident_type)
+        """
+        returns a list with redflags
+        """
+        redflags = get_by_redflag_type()
         return jsonify({
             "status": 200,
             "redflags": redflags,
             "message": "success"
         }), 200
+
+    def fetch_redflag(self, incident_id):
+        """
+        returns a single redflag
+        """
+        redflags = get_by_redflag_type()
+        redflag = [redflag for redflag in redflags if redflag['incident_id'] == incident_id]
+        if redflag:
+            return jsonify({
+                "status": 200,
+                "redflag": redflag,
+                "message": "success"
+            }), 200
+        return jsonify({
+            "status": 404,
+            "message": "Redflag Not Found."
+        })

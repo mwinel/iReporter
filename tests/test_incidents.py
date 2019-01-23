@@ -199,7 +199,6 @@ class RedflagTestCase(BaseTestCase):
             content_type='application/json',
             data=json.dumps(self.user)
         )
-
         auth_token = json.loads(res.data.decode())
         rv = self.app.get(
             '/api/v2/red-flags',
