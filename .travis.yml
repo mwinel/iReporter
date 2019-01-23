@@ -2,12 +2,21 @@ language: python
 python:
  - "3.5.4"
 
+service:
+ - postgresql
+
+env:
+ global:
+  - DB_NAME='test_ireporter'
+
 install:
  - pip install -r requirements.txt
  - pip install coveralls
 
+before_script:
+ - "psql -c 'create database test_ireporter;' -U postgres"
+
 script:
- - python -m unittest discover 
  - python3 -m pytest --cov
 
 after_success:
