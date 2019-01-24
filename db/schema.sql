@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS incidents (
 );
 
 INSERT INTO users (firstname, lastname, othernames, username, email, password,
-                   phone_number, is_admin, created_on)
-SELECT * FROM (SELECT 'nelson', 'murungi', 'mwiru', 'mwinel', 'mwinel@live.com', '123456', '0781916565', TRUE, 1)
+                   phone_number, is_admin)
+SELECT * FROM (SELECT 'nelson', 'murungi', 'mwiru', 'mwinel', 'mwinel@live.com', '123456', '0781916565', TRUE)
 AS tmp WHERE NOT EXISTS
 (SELECT firstname FROM users WHERE firstname = 'nelson') LIMIT 1;

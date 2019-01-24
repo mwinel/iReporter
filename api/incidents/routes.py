@@ -19,8 +19,18 @@ def create_redflag(current_user):
 
 
 @incidents.route("/red-flags", methods=["GET"])
-def get_redflags():
+@token_required
+def get_redflags(current_user):
     """
     api endpoint to fetch redflags
     """
     return incidents_controller.fetch_redflags()
+
+
+@incidents.route("/red-flags/<int:incident_id>", methods=['GET'])
+@token_required
+def get_redflag(current_user, incident_id):
+    """
+    api endpoint to fetch a redflag
+    """
+    return incidents_controller.fetch_redflag(incident_id)
