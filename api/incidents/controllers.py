@@ -102,7 +102,7 @@ class IncidentsController:
             }), 201
         return jsonify({
             "status": 404,
-            "message": "Not Found",
+            "message": "Incident was not found.",
         }), 404
 
 
