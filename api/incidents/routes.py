@@ -14,7 +14,8 @@ incidents_controller = IncidentsController()
 @token_required
 def post_incident(current_user):
     """
-    api endpoint to create redflag
+    api endpoint to create redflag and interventions
+    incident
     """
     return incidents_controller.create_incident(current_user)
 
@@ -24,7 +25,8 @@ def post_incident(current_user):
 @token_required
 def update_incident(current_user, incident_id):
     """
-    api endpoint to update a redflag
+    api endpoint to update a redflag and interventions
+    incident
     """
     return incidents_controller.edit_incident(incident_id)
 
@@ -60,6 +62,15 @@ def delete_redflag(current_user, incident_id):
 @token_required
 def get_interventions(current_user):
     """
-    api endpoint to fetch redflags
+    api endpoint to fetch interventions
     """
     return incidents_controller.fetch_interventions()
+
+
+@incidents.route("/interventions/<int:incident_id>", methods=['GET'])
+@token_required
+def get_intervention(current_user, incident_id):
+    """
+    api endpoint to fetch a redflag
+    """
+    return incidents_controller.fetch_intervention(incident_id)
