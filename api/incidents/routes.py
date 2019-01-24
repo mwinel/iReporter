@@ -34,3 +34,12 @@ def get_redflag(current_user, incident_id):
     api endpoint to fetch a redflag
     """
     return incidents_controller.fetch_redflag(incident_id)
+
+
+@incidents.route("/red-flags/<int:incident_id>", methods=['PUT'])
+# @token_required
+def update_redflag(incident_id):
+    """
+    api endpoint to update a redflag
+    """
+    return incidents_controller.edit_incident(incident_id)

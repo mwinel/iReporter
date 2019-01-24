@@ -97,6 +97,26 @@ class DatabaseConnection:
         incident = self.cursor.fetchone()
         return incident
 
+    def update_incident(self, *args):
+        """
+        updates an incident
+        """
+        incident_type = args[0]
+        location = args[1]
+        status = args[2]
+        images = args[3]
+        videos = args[4]
+        comment = args[5]
+        self.cursor.execute(
+            """
+            UPDATE incidents SET incident_type = '{}', location = '{}',
+            status = '{}', images = '{}', videos = '{}', comment = '{}'
+            RETURNING *;
+            """.format(incident_type, location, status, images, videos, comment)
+        )
+        incident = self.cursor.fetchone()
+        return incident
+
     def fetch_all(self, table):
         """
         returns all rows from a table

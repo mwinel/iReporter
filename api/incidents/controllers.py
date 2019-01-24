@@ -79,6 +79,33 @@ class IncidentsController:
             "message": "success"
         }), 200
 
+    def edit_incident(self, incident_id):
+        """
+        updates an incident
+        """
+        incident = db.get_by_argument('incidents', 'incident_id', incident_id)
+        if incident:
+            data = request.get_json()
+            incident_type = data.get('incident_type')
+            location = data.get('location')
+            status = data.get('status')
+            images = data.get('image')
+            videos = data.get('video')
+            comment = data.get('comment')
+
+            new_incident = db.update_incident(incident_type, location, status, images, 
+                                              videos, comment)
+            return jsonify({
+                "status": 201,
+                "message": "Incident successfully updated.",
+                "data": new_incident
+            }), 201
+        return jsonify({
+            "status": 404,
+            "message": "Not Found",
+        }), 404
+
+
     def fetch_redflag(self, incident_id):
         """
         returns a single redflag
