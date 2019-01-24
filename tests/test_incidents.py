@@ -250,3 +250,49 @@ class RedflagTestCase(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 404)
         self.assertTrue(result["message"] == "Redflag Not Found.")
+
+    def test_update_a_redflag(self):
+        """Test API can update a redflag given its id."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.post(
+            '/api/v2/red-flags',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.redflag)
+        )
+        self.assertTrue(rv.status_code, 201)
+        self.redflag["comment"] = "stolen Education money"
+        res = self.app.put(
+            '/api/v2/red-flags/1',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.redflag)
+        )
+        result = json.loads(res.data.decode())
+        self.assertTrue(res.status_code, 201)
+        self.assertTrue(result["message"] == "Incident successfully updated.")
+
+    def test_update_a_non_existing_redflag(self):
+        """Test API cannot update a non existing redflag."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.put(
+            '/api/v2/red-flags/20000',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.redflag)
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 404)
+        self.assertTrue(result["message"] == "Incident was not found.")
