@@ -5,7 +5,8 @@ import datetime
 from flask import request, jsonify
 from db.database import DatabaseConnection
 from api.incidents.validators import IncidentValidations
-from api.incidents.helpers import get_redflags_by_redflag_type
+from api.incidents.helpers import (get_redflags_by_redflag_type, 
+                                   get_interventions_by_intervention_type)
 
 db = DatabaseConnection()
 incident_validations = IncidentValidations()
@@ -139,3 +140,14 @@ class IncidentsController:
             "status": 404,
             "message": "Redflag Not Found."
         })
+
+    def fetch_interventions(self):
+        """
+        returns a list with intervention incidents
+        """
+        interventions = get_interventions_by_intervention_type()
+        return jsonify({
+            "status": 200,
+            "redflags": interventions,
+            "message": "success"
+        }), 200

@@ -19,6 +19,16 @@ def post_incident(current_user):
     return incidents_controller.create_incident(current_user)
 
 
+@incidents.route("/red-flags/<int:incident_id>", methods=['PUT'])
+@incidents.route("/interventions/<int:incident_id>", methods=['PUT'])
+@token_required
+def update_incident(current_user, incident_id):
+    """
+    api endpoint to update a redflag
+    """
+    return incidents_controller.edit_incident(incident_id)
+
+
 @incidents.route("/red-flags", methods=["GET"])
 @token_required
 def get_redflags(current_user):
@@ -37,16 +47,6 @@ def get_redflag(current_user, incident_id):
     return incidents_controller.fetch_redflag(incident_id)
 
 
-@incidents.route("/red-flags/<int:incident_id>", methods=['PUT'])
-@incidents.route("/interventions/<int:incident_id>", methods=['PUT'])
-@token_required
-def update_redflag(current_user, incident_id):
-    """
-    api endpoint to update a redflag
-    """
-    return incidents_controller.edit_incident(incident_id)
-
-
 @incidents.route("/red-flags/<int:incident_id>", methods=['DELETE'])
 @token_required
 def delete_redflag(current_user, incident_id):
@@ -54,3 +54,12 @@ def delete_redflag(current_user, incident_id):
     api endpoint to delete a redflag
     """
     return incidents_controller.delete_redflag(incident_id)
+
+
+@incidents.route("/interventions", methods=["GET"])
+@token_required
+def get_interventions(current_user):
+    """
+    api endpoint to fetch redflags
+    """
+    return incidents_controller.fetch_interventions()

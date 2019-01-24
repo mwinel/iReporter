@@ -334,3 +334,21 @@ class IncidentTestCase(BaseTestCase):
             content_type='application/json'
         )
         self.assertTrue(result.status_code, 404)
+
+    def test_get_interventions(self):
+        """Test API can fetch all interventions."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.get(
+            '/api/v2/interventions',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "success")
