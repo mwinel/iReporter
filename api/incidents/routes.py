@@ -37,9 +37,18 @@ def get_redflag(current_user, incident_id):
 
 
 @incidents.route("/red-flags/<int:incident_id>", methods=['PUT'])
-# @token_required
-def update_redflag(incident_id):
+@token_required
+def update_redflag(current_user, incident_id):
     """
     api endpoint to update a redflag
     """
     return incidents_controller.edit_incident(incident_id)
+
+
+@incidents.route("/red-flags/<int:incident_id>", methods=['DELETE'])
+@token_required
+def delete_redflag(current_user, incident_id):
+    """
+    api endpoint to delete a redflag
+    """
+    return incidents_controller.delete_redflag(incident_id)

@@ -153,8 +153,10 @@ class DatabaseConnection:
         """
         deletes a rows by argument
         """
-        self.cursor.execute("DELETE FROM {} WHERE {} = '{}'").format(
-            table, column, argument)
+        self.cursor.execute(
+            """
+            DELETE FROM {} WHERE {} = '{}'
+            """.format(table, column, argument))
 
     def drop_tables(self):
         """
