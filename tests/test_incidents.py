@@ -352,3 +352,42 @@ class IncidentTestCase(BaseTestCase):
         result = json.loads(rv.data.decode())
         self.assertTrue(rv.status_code, 200)
         self.assertTrue(result["message"] == "success")
+
+    def test_get_intervention(self):
+        """Test API can fetch an intervention."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        self.incident['incident_type'] = "intervention"
+        res = self.app.post(
+            'api/v2/interventions',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.incident)
+        )
+        rv = self.app.get(
+            '/api/v2/interventions/1',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        self.assertTrue(rv.status_code, 200)
+
+    def test_get_non_existing_intervention(self):
+        """Test API cannot fetch a non existing intervention."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.get(
+            '/api/v2/interventions/10000',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        self.assertTrue(rv.status_code, 404)

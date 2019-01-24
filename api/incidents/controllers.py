@@ -5,7 +5,7 @@ import datetime
 from flask import request, jsonify
 from db.database import DatabaseConnection
 from api.incidents.validators import IncidentValidations
-from api.incidents.helpers import (get_redflags_by_redflag_type, 
+from api.incidents.helpers import (get_redflags_by_redflag_type,
                                    get_interventions_by_intervention_type)
 
 db = DatabaseConnection()
@@ -49,7 +49,8 @@ class IncidentsController:
         # validate incident
         validate_input = incident_validations.validate_incident_input(status, incident_type,
                                                                       location, comment)
-        validate_media = incident_validations.validate_incident_media(images, videos)
+        validate_media = incident_validations.validate_incident_media(
+            images, videos)
         if validate_input:
             return jsonify({
                 "status": 400,
@@ -94,7 +95,7 @@ class IncidentsController:
             videos = data.get('video')
             comment = data.get('comment')
 
-            new_incident = db.update_incident(incident_type, location, status, images, 
+            new_incident = db.update_incident(incident_type, location, status, images,
                                               videos, comment)
             return jsonify({
                 "status": 201,
@@ -106,13 +107,13 @@ class IncidentsController:
             "message": "Incident was not found.",
         }), 404
 
-
     def fetch_redflag(self, incident_id):
         """
         returns a single redflag incident
         """
         redflags = get_redflags_by_redflag_type()
-        redflag = [redflag for redflag in redflags if redflag['incident_id'] == incident_id]
+        redflag = [
+            redflag for redflag in redflags if redflag['incident_id'] == incident_id]
         if redflag:
             return jsonify({
                 "status": 200,
@@ -129,7 +130,8 @@ class IncidentsController:
         deletes a redflag incident
         """
         redflags = get_redflags_by_redflag_type()
-        redflag = [redflag for redflag in redflags if redflag['incident_id'] == incident_id]
+        redflag = [
+            redflag for redflag in redflags if redflag['incident_id'] == incident_id]
         if redflag:
             db.delete_by_argument('incidents', 'incident_id', incident_id)
             return jsonify({
@@ -151,3 +153,22 @@ class IncidentsController:
             "redflags": interventions,
             "message": "success"
         }), 200
+
+    def fetch_intervention(self, incident_id):
+        """
+        returns a single intervention incident
+        """
+        interventions = get_interventions_by_intervention_type()
+        intervention = [
+            intervention for intervention in interventions \
+            if intervention['incident_id'] == incident_id]
+        if intervention:
+            return jsonify({
+                "status": 200,
+                "redflag": intervention,
+                "message": "success"
+            }), 200
+        return jsonify({
+            "status": 404,
+            "message": "Intervention Not Found."
+        })
