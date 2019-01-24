@@ -64,3 +64,10 @@ def token_required(f):
             }), 401
         return f(current_user, *args, **kwargs)
     return decorated
+
+
+def is_admin():
+    is_admin = True
+    admin = db.get_by_argument('users', 'is_admin', is_admin)
+    return admin
+        

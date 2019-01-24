@@ -391,3 +391,42 @@ class IncidentTestCase(BaseTestCase):
             content_type='application/json'
         )
         self.assertTrue(rv.status_code, 404)
+
+    def test_remove_a_specific_intervention(self):
+        """Test API can delete a specific intervention."""
+        self.user['is_admin'] = "True"
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        self.incident['incident_type'] = "intervention"
+        rv = self.app.post(
+            '/api/v2/interventions',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.incident)
+        )
+        result = self.app.delete(
+            '/api/v2/interventions/1',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        self.assertTrue(result.status_code, 200)
+
+    def test_remove_a_non_existing_intervention(self):
+        """Test API can delete a non existing redflag."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        result = self.app.delete(
+            '/api/v2/interventions/1000',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        self.assertTrue(result.status_code, 404)
