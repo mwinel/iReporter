@@ -5,15 +5,10 @@ import datetime
 from flask import request, jsonify
 from db.database import DatabaseConnection
 from api.incidents.validators import IncidentValidations
+from api.incidents.helpers import get_by_redflag_type
 
 db = DatabaseConnection()
 incident_validations = IncidentValidations()
-
-
-def get_by_redflag_type():
-    incident_type = 'red-flag'
-    redflags = db.get_all_by_argument('incidents', 'incident_type', incident_type)
-    return redflags
 
 
 class IncidentsController:
