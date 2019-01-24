@@ -12,7 +12,7 @@ incidents_controller = IncidentsController()
 @incidents.route("/red-flags", methods=['POST'])
 @incidents.route("/interventions", methods=['POST'])
 @token_required
-def create_redflag(current_user):
+def post_incident(current_user):
     """
     api endpoint to create redflag
     """
