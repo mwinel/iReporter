@@ -5,7 +5,7 @@ import datetime
 from flask import request, jsonify
 from db.database import DatabaseConnection
 from api.incidents.validators import IncidentValidations
-from api.incidents.helpers import get_by_redflag_type
+from api.incidents.helpers import get_redflags_by_redflag_type
 
 db = DatabaseConnection()
 incident_validations = IncidentValidations()
@@ -72,7 +72,7 @@ class IncidentsController:
         """
         returns a list with redflags
         """
-        redflags = get_by_redflag_type()
+        redflags = get_redflags_by_redflag_type()
         return jsonify({
             "status": 200,
             "redflags": redflags,
@@ -108,15 +108,32 @@ class IncidentsController:
 
     def fetch_redflag(self, incident_id):
         """
-        returns a single redflag
+        returns a single redflag incident
         """
-        redflags = get_by_redflag_type()
+        redflags = get_redflags_by_redflag_type()
         redflag = [redflag for redflag in redflags if redflag['incident_id'] == incident_id]
         if redflag:
             return jsonify({
                 "status": 200,
                 "redflag": redflag,
                 "message": "success"
+            }), 200
+        return jsonify({
+            "status": 404,
+            "message": "Redflag Not Found."
+        })
+
+    def delete_redflag(self, incident_id):
+        """
+        deletes a redflag incident
+        """
+        redflags = get_redflags_by_redflag_type()
+        redflag = [redflag for redflag in redflags if redflag['incident_id'] == incident_id]
+        if redflag:
+            db.delete_by_argument('incidents', 'incident_id', incident_id)
+            return jsonify({
+                "status": 200,
+                "message": "Redflag successfully deleted."
             }), 200
         return jsonify({
             "status": 404,

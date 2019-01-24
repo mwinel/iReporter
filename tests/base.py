@@ -23,7 +23,7 @@ class BaseTestCase(unittest.TestCase):
             "password": "654321",
             "phone_number": "256 781916565"
         }
-        self.redflag = {
+        self.incident = {
             "incident_type": "red-flag",
             "location": "lat long cordinates",
             "status": "draft",
