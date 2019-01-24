@@ -38,6 +38,7 @@ def get_redflag(current_user, incident_id):
 
 
 @incidents.route("/red-flags/<int:incident_id>", methods=['PUT'])
+@incidents.route("/interventions/<int:incident_id>", methods=['PUT'])
 @token_required
 def update_redflag(current_user, incident_id):
     """
