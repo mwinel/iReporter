@@ -81,7 +81,7 @@ class IncidentsController:
             "message": "success"
         }), 200
 
-    def edit_incident(self, incident_id):
+    def edit_incident(self, current_user, incident_id):
         """
         updates an incident
         """
@@ -167,6 +167,25 @@ class IncidentsController:
                 "status": 200,
                 "redflag": intervention,
                 "message": "success"
+            }), 200
+        return jsonify({
+            "status": 404,
+            "message": "Intervention Not Found."
+        })
+
+    def delete_intervention(self, incident_id):
+        """
+        deletes an intervention incident
+        """
+        interventions = get_interventions_by_intervention_type()
+        intervention = [
+            intervention for intervention in interventions \
+            if intervention['incident_id'] == incident_id]
+        if intervention:
+            db.delete_by_argument('incidents', 'incident_id', incident_id)
+            return jsonify({
+                "status": 200,
+                "message": "Intervention successfully deleted."
             }), 200
         return jsonify({
             "status": 404,

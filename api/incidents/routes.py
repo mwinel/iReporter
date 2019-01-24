@@ -1,7 +1,7 @@
 """
 Redflag routes
 """
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from api.incidents.controllers import IncidentsController
 from api.auth.helpers import token_required
 
@@ -28,7 +28,7 @@ def update_incident(current_user, incident_id):
     api endpoint to update a redflag and interventions
     incident
     """
-    return incidents_controller.edit_incident(incident_id)
+    return incidents_controller.edit_incident(current_user, incident_id)
 
 
 @incidents.route("/red-flags", methods=["GET"])
@@ -55,7 +55,12 @@ def delete_redflag(current_user, incident_id):
     """
     api endpoint to delete a redflag
     """
-    return incidents_controller.delete_redflag(incident_id)
+    if current_user['is_admin'] is True:
+        return incidents_controller.delete_redflag(incident_id)
+    return jsonify({
+        "status": 403,
+        "message": "Cannot perform this task."
+    }), 403
 
 
 @incidents.route("/interventions", methods=["GET"])
@@ -71,6 +76,20 @@ def get_interventions(current_user):
 @token_required
 def get_intervention(current_user, incident_id):
     """
-    api endpoint to fetch a redflag
+    api endpoint to fetch an intervention incident
     """
     return incidents_controller.fetch_intervention(incident_id)
+
+
+@incidents.route("/interventions/<int:incident_id>", methods=['DELETE'])
+@token_required
+def delete_intervention(current_user, incident_id):
+    """
+    api endpoint to delete an intervention incident
+    """
+    if current_user['is_admin'] is True:
+        return incidents_controller.delete_intervention(incident_id)
+    return jsonify({
+        "status": 403,
+        "message": "Cannot perform this task."
+    }), 403
