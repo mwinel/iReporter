@@ -50,7 +50,7 @@ def token_required(f):
         auth_token = request.headers['Authorization']
         try:
             identinty = jwt.decode(
-                auth_token, 'some-boy-just-went-mad-coding')
+                auth_token, 'some-boy-just-went-mad-coding', algorithms='HS256')
             current_user = get_user(username=identinty['sub'])
         except jwt.ExpiredSignatureError:
             return jsonify({

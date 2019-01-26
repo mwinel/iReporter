@@ -87,21 +87,25 @@ class IncidentsController:
         """
         incident = db.get_by_argument('incidents', 'incident_id', incident_id)
         if incident:
-            data = request.get_json()
-            incident_type = data.get('incident_type')
-            location = data.get('location')
-            status = data.get('status')
-            images = data.get('image')
-            videos = data.get('video')
-            comment = data.get('comment')
-
-            new_incident = db.update_incident(incident_type, location, status, images,
-                                              videos, comment)
+            if int(incident['created_by']) == int(current_user['user_id']):
+                data = request.get_json()
+                incident_type = data.get('incident_type', incident['incident_type'])
+                location = data.get('location', incident['location'])
+                status = data.get('status', incident['status'])
+                images = data.get('images', incident['status'])
+                videos = data.get('videos', incident['videos'])
+                comment = data.get('comment', incident['comment'])
+                new_incident = db.update_incident(incident_type, location, status, images,
+                                                videos, comment, incident_id)
+                return jsonify({
+                    "status": 201,
+                    "message": "Incident successfully updated.",
+                    "data": new_incident
+                }), 201
             return jsonify({
-                "status": 201,
-                "message": "Incident successfully updated.",
-                "data": new_incident
-            }), 201
+                "status": 403,
+                "message": "You cannot edit this incident."
+            }), 403
         return jsonify({
             "status": 404,
             "message": "Incident was not found.",

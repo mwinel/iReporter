@@ -394,20 +394,25 @@ class IncidentTestCase(BaseTestCase):
 
     def test_remove_a_specific_intervention(self):
         """Test API can delete a specific intervention."""
-        self.user['is_admin'] = "True"
+
         res = self.app.post(
             'api/v2/auth/signup',
             content_type='application/json',
-            data=json.dumps(self.user)
+            data=json.dumps(self.admin)
         )
-        auth_token = json.loads(res.data.decode())
-        self.incident['incident_type'] = "intervention"
+        response = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps({"username": "paulk", "password": "654321"})
+        )
+        auth_token = json.loads(response.data.decode())
         rv = self.app.post(
             '/api/v2/interventions',
             headers={'Authorization': auth_token['access_token']},
             content_type='application/json',
-            data=json.dumps(self.incident)
+            data=json.dumps(self.incident2)
         )
+        self.assertTrue(rv.status_code, 201)
         result = self.app.delete(
             '/api/v2/interventions/1',
             headers={'Authorization': auth_token['access_token']},

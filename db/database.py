@@ -23,7 +23,8 @@ class DatabaseConnection:
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="postgres",
+            user="murungi",
+            password="myPassword",
             host="localhost",
             port="5432"
         )
@@ -107,12 +108,15 @@ class DatabaseConnection:
         images = args[3]
         videos = args[4]
         comment = args[5]
+        incident_id = args[6]
         self.cursor.execute(
             """
             UPDATE incidents SET incident_type = '{}', location = '{}',
             status = '{}', images = '{}', videos = '{}', comment = '{}'
+            WHERE incident_id = '{}'
             RETURNING *;
-            """.format(incident_type, location, status, images, videos, comment)
+            """
+            .format(incident_type, location, status, images, videos, comment, incident_id)
         )
         incident = self.cursor.fetchone()
         return incident
