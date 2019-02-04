@@ -2,13 +2,13 @@
 
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
-    firstname VARCHAR(20),
-    lastname VARCHAR(20),
-    othernames VARCHAR(20),
-    username VARCHAR(20),
-    email VARCHAR(20),
+    firstname VARCHAR(120),
+    lastname VARCHAR(120),
+    othernames VARCHAR(120),
+    username VARCHAR(120),
+    email VARCHAR(120),
     password VARCHAR(200),
-    phone_number VARCHAR(20),
+    phone_number VARCHAR(120),
     is_admin BOOLEAN DEFAULT FALSE,
     created_on TEXT
 );
