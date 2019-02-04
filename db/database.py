@@ -19,7 +19,7 @@ class DatabaseConnection:
         if os.getenv('DB_NAME') == 'test_ireporter':
             self.db_name = 'test_ireporter'
         else:
-            self.db_name = 'ireporter'
+            self.db_name = 'd34e30lpcvk6uh'
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
