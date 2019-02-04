@@ -29,15 +29,17 @@ class UserController:
         """
         creates user account
         """
-        data = request.get_json()
-        firstname = data.get('firstname')
-        lastname = data.get('lastname')
-        othernames = data.get('othernames')
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
-        phone_number = data.get('phone_number')
+        data = request.get_json(force=True)
+
+        firstname = data['firstname']
+        lastname = data['lastname']
+        othernames = data['othernames']
+        username = data['username']
+        email = data['email']
+        password = data['password']
+        phone_number = data['phone_number']
         created_on = datetime.datetime.now()
+
         # validate user input
         validate_input = user_validations.validate_user_input(username, firstname, lastname,
                                                               othernames, phone_number)
@@ -63,7 +65,7 @@ class UserController:
         if user_exists:
             return jsonify({
                 "status": 202,
-                "message": "User already exists. Please login."
+                "error": "User already exists. Please login."
             }), 202
         add_user = db.insert_user_data(firstname, lastname, othernames, username, email,
                                        password, phone_number, created_on)
