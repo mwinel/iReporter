@@ -23,8 +23,9 @@ class DatabaseConnection:
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="postgres",
-            host="localhost",
+            user="gdmeyjojklxlub",
+            password="a0dba871c977cbc3dae461cc3b8fcf2d20a1442e6e3e1ec7f84fa5cf66ee76e6",
+            host="ec2-107-21-224-76.compute-1.amazonaws.com",
             port="5432"
         )
         self.connection.autocommit = True
