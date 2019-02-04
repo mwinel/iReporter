@@ -19,13 +19,13 @@ class DatabaseConnection:
         if os.getenv('DB_NAME') == 'test_ireporter':
             self.db_name = 'test_ireporter'
         else:
-            self.db_name = 'd34e30lpcvk6uh'
+            self.db_name = 'd2b34d0sq2l9kk'
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="gdmeyjojklxlub",
-            password="a0dba871c977cbc3dae461cc3b8fcf2d20a1442e6e3e1ec7f84fa5cf66ee76e6",
-            host="ec2-107-21-224-76.compute-1.amazonaws.com",
+            user="bkkzjmciviyvze",
+            password="e1c5603f5ea7371a05a488a7d327ef57c9bcd76f81b8cb0fa08ab06dd27a49ef",
+            host="ec2-23-21-171-25.compute-1.amazonaws.com",
             port="5432"
         )
         self.connection.autocommit = True

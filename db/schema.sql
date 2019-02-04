@@ -15,12 +15,12 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS incidents (
     incident_id SERIAL PRIMARY KEY,
-    incident_type VARCHAR(20),
-    location VARCHAR(100),
-    status VARCHAR(50) DEFAULT 'draft',
-    images VARCHAR(50),
-    videos VARCHAR(50),
-    comment VARCHAR(50),
+    incident_type VARCHAR(200),
+    location VARCHAR(200),
+    status VARCHAR(200) DEFAULT 'draft',
+    images VARCHAR(200),
+    videos VARCHAR(200),
+    comment VARCHAR(200),
     created_on TEXT,
     created_by TEXT
 );
