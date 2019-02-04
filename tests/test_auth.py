@@ -38,7 +38,7 @@ class TestUserAuth(BaseTestCase):
         result = json.loads(res.data.decode())
         self.assertTrue(res.status_code, 202)
         self.assertTrue(result["status"] == 202)
-        self.assertTrue(result["message"] ==
+        self.assertTrue(result["error"] ==
                         "User already exists. Please login.")
 
     def test_signup_with_invalid_email(self):
