@@ -81,9 +81,9 @@ class UserController:
         """
         logs in a registered user
         """
-        data = request.get_json()
-        username = data.get('username')
-        password = data.get('password')
+        data = request.get_json(force=True)
+        username = data['username']
+        password = data['password']
         current_user = db.get_by_argument('users', 'username', username)
         if not current_user:
             return jsonify({
