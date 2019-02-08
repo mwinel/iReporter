@@ -37,16 +37,16 @@ class BaseTestCase(unittest.TestCase):
             "incident_type": "red-flag",
             "location": "lat long cordinates",
             "status": "draft",
-            "image": "girl-ethiopian-child-portrait-38634.jpeg",
-            "video": "girl-ethiopian-child-portrait-38634.mkv",
+            "images": "girl-ethiopian-child-portrait-38634.jpeg",
+            "videos": "girl-ethiopian-child-portrait-38634.mkv",
             "comment": "Alot of money has stolen since 2010."
         }
         self.incident2 = {
             "incident_type": "intervention",
             "location": "lat long cordinates",
             "status": "draft",
-            "image": "girl-ethiopian-child-portrait-38634.jpeg",
-            "video": "girl-ethiopian-child-portrait-38634.mkv",
+            "images": "girl-ethiopian-child-portrait-38634.jpeg",
+            "videos": "girl-ethiopian-child-portrait-38634.mkv",
             "comment": "Alot of money has stolen since 2010."
         }
 

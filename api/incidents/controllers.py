@@ -36,13 +36,13 @@ class IncidentsController:
         """
         creates a incident
         """
-        data = request.get_json()
-        incident_type = data.get('incident_type')
-        location = data.get('location')
-        status = data.get('status')
-        images = data.get('image')
-        videos = data.get('video')
-        comment = data.get('comment')
+        data = request.get_json(force=True)
+        incident_type = data['incident_type']
+        location = data['location']
+        status = 'draft'
+        images = data['images']
+        videos = data['videos']
+        comment = data['comment']
         created_on = datetime.datetime.now()
         created_by = current_user.get('user_id')
 
@@ -92,11 +92,11 @@ class IncidentsController:
                 incident_type = data.get('incident_type', incident['incident_type'])
                 location = data.get('location', incident['location'])
                 status = data.get('status', incident['status'])
-                images = data.get('images', incident['status'])
+                images = data.get('images', incident['images'])
                 videos = data.get('videos', incident['videos'])
                 comment = data.get('comment', incident['comment'])
                 new_incident = db.update_incident(incident_type, location, status, images,
-                                                videos, comment, incident_id)
+                                                  videos, comment, incident_id)
                 return jsonify({
                     "status": 201,
                     "message": "Incident successfully updated.",
