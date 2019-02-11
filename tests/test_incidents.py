@@ -184,6 +184,24 @@ class IncidentTestCase(BaseTestCase):
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["error"] == "Invalid video format.")
 
+    def test_get_incidents(self):
+        """Test API can fetch all incidents."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.get(
+            '/api/v2/incidents',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "success")
+
     def test_get_redflags(self):
         """Test API can fetch all redflags."""
 

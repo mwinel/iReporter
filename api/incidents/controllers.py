@@ -70,6 +70,17 @@ class IncidentsController:
             "data": incident
         }), 201
 
+    def fetch_incidents(self):
+        """
+        returns all incidents
+        """
+        incidents = db.fetch_all('incidents')
+        return jsonify({
+            "status": 200,
+            "incidents": incidents,
+            "message": "success"
+        }), 200
+
     def fetch_redflags(self):
         """
         returns a list with redflags
