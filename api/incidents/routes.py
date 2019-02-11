@@ -9,6 +9,15 @@ incidents = Blueprint('incidents', __name__)
 incidents_controller = IncidentsController()
 
 
+@incidents.route("/incidents", methods=["GET"])
+@token_required
+def get_incidents(current_user):
+    """
+    api endpoint to fetch incidents
+    """
+    return incidents_controller.fetch_incidents()
+
+
 @incidents.route("/red-flags", methods=['POST'])
 @incidents.route("/interventions", methods=['POST'])
 @token_required
@@ -38,15 +47,6 @@ def get_redflags(current_user):
     api endpoint to fetch redflags
     """
     return incidents_controller.fetch_redflags()
-
-
-@incidents.route("/incidents", methods=["GET"])
-@token_required
-def get_incidents(current_user):
-    """
-    api endpoint to fetch incidents
-    """
-    return incidents_controller.fetch_incidents()
 
 
 @incidents.route("/red-flags/<int:incident_id>", methods=['GET'])
