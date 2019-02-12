@@ -165,7 +165,7 @@ class IncidentsController:
         interventions = get_interventions_by_intervention_type()
         return jsonify({
             "status": 200,
-            "redflags": interventions,
+            "interventions": interventions,
             "message": "success"
         }), 200
 
@@ -180,7 +180,7 @@ class IncidentsController:
         if intervention:
             return jsonify({
                 "status": 200,
-                "redflag": intervention,
+                "intervention": intervention,
                 "message": "success"
             }), 200
         return jsonify({
