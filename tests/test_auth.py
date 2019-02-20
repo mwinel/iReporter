@@ -129,21 +129,6 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(result["error"] ==
                         "Password field cannot be left empty.")
 
-    def test_signup_with_missing_othernames(self):
-        """Test user cannot signup with missing othernames field."""
-
-        self.user["othernames"] = " "
-        rv = self.app.post(
-            'api/v2/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        result = json.loads(rv.data.decode())
-        self.assertTrue(rv.status_code, 400)
-        self.assertTrue(result["status"] == 400)
-        self.assertTrue(result["error"] ==
-                        "Othernames field cannot be left empty.")
-
     def test_signup_with_missing_phonenumber(self):
         """Test user cannot signup with missing phonenumber field."""
 

@@ -39,10 +39,9 @@ class UserController:
         password = data['password']
         phone_number = data['phone_number']
         created_on = datetime.datetime.now()
-
         # validate user input
         validate_input = user_validations.validate_user_input(username, firstname, lastname,
-                                                              othernames, phone_number)
+                                                              phone_number)
         validate_email = user_validations.validate_user_email(email)
         validate_password = user_validations.validate_user_password(password)
         if validate_input:

@@ -28,7 +28,7 @@ class UserValidations:
         if len(password) < 6:
             return "Password too short, must be atleast 6 characters or more."
 
-    def validate_user_input(self, username, firstname, lastname, othernames, phone_number):
+    def validate_user_input(self, username, firstname, lastname, phone_number):
         """
         validates user input
         returns: error message
@@ -39,7 +39,5 @@ class UserValidations:
             return "Firstname field cannot be left empty."
         if not lastname or lastname.isspace():
             return "Lastname field cannot be left empty."
-        if not othernames or othernames.isspace():
-            return "Othernames field cannot be left empty."
         if not phone_number or phone_number.isspace():
             return "Phone number field cannot be left empty."
