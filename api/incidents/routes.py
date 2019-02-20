@@ -18,6 +18,15 @@ def get_incidents(current_user):
     return incidents_controller.fetch_incidents()
 
 
+@incidents.route("/user-incidents", methods=['GET'])
+@token_required
+def get_user_incidents(current_user):
+    """
+    api endpoint to fetch incidents by a given user
+    """
+    return incidents_controller.fetch_incidents_by_user(current_user)
+
+
 @incidents.route("/incidents", methods=['POST'])
 @token_required
 def post_incident(current_user):

@@ -132,6 +132,24 @@ class IncidentTestCase(BaseTestCase):
         self.assertTrue(rv.status_code, 200)
         self.assertTrue(result["message"] == "success")
 
+    def test_get_user_incidents(self):
+        """Test API can fetch all incidents by a given user."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.get(
+            '/api/v2/user-incidents',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json'
+        )
+        result = json.loads(rv.data.decode())
+        self.assertTrue(rv.status_code, 200)
+        self.assertTrue(result["message"] == "success")
+
     def test_get_a_non_existing_incident(self):
         """Test API cannot fetch a non existing incident record."""
 
