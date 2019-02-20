@@ -121,7 +121,7 @@ class IncidentTestCase(BaseTestCase):
             'api/v2/incidents',
             headers={'Authorization': auth_token['access_token']},
             content_type='application/json',
-            data=json.dumps(self.incident2)
+            data=json.dumps(self.incident)
         )
         rv = self.app.get(
             '/api/v2/incidents/1',
