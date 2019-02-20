@@ -45,23 +45,14 @@ class IncidentsController:
         comment = data['comment']
         created_on = datetime.datetime.now()
         created_by = current_user.get('user_id')
-
         # validate incident
         validate_input = incident_validations.validate_incident_input(status, incident_type,
                                                                       location, comment)
-        validate_media = incident_validations.validate_incident_media(
-            images, videos)
         if validate_input:
             return jsonify({
                 "status": 400,
                 "error": validate_input
             }), 400
-        if validate_media:
-            return jsonify({
-                "status": 400,
-                "error": validate_media
-            }), 400
-
         incident = db.insert_incident_data(incident_type, location, status,
                                            images, videos, comment, created_on, created_by)
         return jsonify({
@@ -80,6 +71,37 @@ class IncidentsController:
             "incidents": incidents,
             "message": "success"
         }), 200
+
+    def fetch_incidents_by_user(self, current_user, created_by, user_id):
+        """
+        returns a list of incidents by created by a user
+        """
+        created_by = current_user[user_id]
+        incidents = db.get_all_by_argument('incidents', 'created_by', created_by)
+        if incidents:
+            return jsonify(incidents=incidents), 200
+        return jsonify({
+            "status": 404,
+            "message": "No Incidents Found."
+        })
+
+    def fetch_incident(self, incident_id):
+        """
+        returns a single incident
+        """
+        incidents = db.fetch_all('incidents')
+        incident = [
+            incident for incident in incidents if incident['incident_id'] == incident_id]
+        if incident:
+            return jsonify({
+                "status": 200,
+                "incident": incident,
+                "message": "success"
+            }), 200
+        return jsonify({
+            "status": 404,
+            "message": "Incident Not Found."
+        })
 
     def fetch_redflags(self):
         """

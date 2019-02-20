@@ -27,24 +27,6 @@ class IncidentTestCase(BaseTestCase):
         self.assertTrue(rv.status_code, 201)
         self.assertTrue(result["message"] == "Incident successfully created.")
 
-    def test_create_redflag_with_missing_status(self):
-        """Test API cannot create redflag with missing status field."""
-
-        res = self.app.post(
-            'api/v2/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        auth_token = json.loads(res.data.decode())
-        self.incident["status"] = " "
-        rv = self.app.post(
-            '/api/v2/red-flags',
-            headers={'Authorization': auth_token['access_token']},
-            content_type='application/json',
-            data=json.dumps(self.incident)
-        )
-        self.assertTrue(rv.status_code, 400)
-
     def test_create_redflag_with_missing_incident_type(self):
         """Test API cannot create incident with missing incident field."""
 
@@ -87,44 +69,6 @@ class IncidentTestCase(BaseTestCase):
         self.assertTrue(result["error"] ==
                         "Location field cannot be left empty.")
 
-    def test_create_redflag_with_missing_image(self):
-        """Test API cannot create redflag with missing image field."""
-
-        res = self.app.post(
-            'api/v2/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        auth_token = json.loads(res.data.decode())
-        self.incident["images"] = " "
-        rv = self.app.post(
-            '/api/v2/red-flags',
-            headers={'Authorization': auth_token['access_token']},
-            content_type='application/json',
-            data=json.dumps(self.incident)
-        )
-        result = json.loads(rv.data.decode())
-        self.assertTrue(rv.status_code, 400)
-        self.assertTrue(result["error"] == "Image field cannot be left empty.")
-
-    def test_create_redflag_with_missing_video(self):
-        """Test API cannot create redflag with missing video field."""
-
-        res = self.app.post(
-            'api/v2/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        auth_token = json.loads(res.data.decode())
-        self.incident["video"] = " "
-        rv = self.app.post(
-            '/api/v2/red-flags',
-            headers={'Authorization': auth_token['access_token']},
-            content_type='application/json',
-            data=json.dumps(self.incident2)
-        )
-        self.assertTrue(rv.status_code, 400)
-
     def test_create_redflag_with_missing_comment(self):
         """Test API cannot create redflag with missing comment field."""
 
@@ -145,44 +89,6 @@ class IncidentTestCase(BaseTestCase):
         self.assertTrue(rv.status_code, 400)
         self.assertTrue(result["error"] ==
                         "Comment field cannot be left empty.")
-
-    def test_create_redflag_with_invalid_image(self):
-        """Test API cannot create redflag with wrong image format."""
-
-        res = self.app.post(
-            'api/v2/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        auth_token = json.loads(res.data.decode())
-        self.incident["image"] = "image1"
-        rv = self.app.post(
-            '/api/v2/red-flags',
-            headers={'Authorization': auth_token['access_token']},
-            content_type='application/json',
-            data=json.dumps(self.incident)
-        )
-        self.assertTrue(rv.status_code, 400)
-
-    def test_create_redflag_with_invalid_video(self):
-        """Test API cannot create redflag with wrong video format."""
-
-        res = self.app.post(
-            'api/v2/auth/signup',
-            content_type='application/json',
-            data=json.dumps(self.user)
-        )
-        auth_token = json.loads(res.data.decode())
-        self.incident["videos"] = "image1"
-        rv = self.app.post(
-            '/api/v2/red-flags',
-            headers={'Authorization': auth_token['access_token']},
-            content_type='application/json',
-            data=json.dumps(self.incident)
-        )
-        result = json.loads(rv.data.decode())
-        self.assertTrue(rv.status_code, 400)
-        self.assertTrue(result["error"] == "Invalid video format.")
 
     def test_get_incidents(self):
         """Test API can fetch all incidents."""
