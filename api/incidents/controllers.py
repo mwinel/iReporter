@@ -70,6 +70,18 @@ class IncidentsController:
             "message": "success"
         }), 200
 
+    def fetch_incidents_by_user(self, current_user):
+        """
+        returns all incidents of a given user
+        """
+        created_by = current_user["user_id"]
+        incidents = db.get_all_by_argument('incidents', 'created_by', created_by)
+        return jsonify({
+            "status": 200,
+            "incidents": incidents,
+            "message": "success"
+        }), 200
+
     def fetch_incident(self, incident_id):
         """
         returns a single incident
