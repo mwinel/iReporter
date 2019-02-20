@@ -1,9 +1,9 @@
 """
 Redflag routes
 """
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from api.incidents.controllers import IncidentsController
-from api.auth.helpers import token_required
+from api.auth.helpers import token_required, is_admin
 
 incidents = Blueprint('incidents', __name__)
 incidents_controller = IncidentsController()
@@ -18,19 +18,26 @@ def get_incidents(current_user):
     return incidents_controller.fetch_incidents()
 
 
-@incidents.route("/red-flags", methods=['POST'])
-@incidents.route("/interventions", methods=['POST'])
+@incidents.route("/incidents", methods=['POST'])
 @token_required
 def post_incident(current_user):
     """
-    api endpoint to create redflag and interventions
-    incident
+    api endpoint to create redflag and intervention
+    incidents
     """
     return incidents_controller.create_incident(current_user)
 
 
-@incidents.route("/red-flags/<int:incident_id>", methods=['PUT'])
-@incidents.route("/interventions/<int:incident_id>", methods=['PUT'])
+@incidents.route("/incidents/<int:incident_id>", methods=['GET'])
+@token_required
+def get_incident(current_user, incident_id):
+    """
+    api endpoint to fetch an incident
+    """
+    return incidents_controller.fetch_incident(incident_id)
+
+
+@incidents.route("/incidents/<int:incident_id>", methods=['PUT'])
 @token_required
 def update_incident(current_user, incident_id):
     """
@@ -40,65 +47,21 @@ def update_incident(current_user, incident_id):
     return incidents_controller.edit_incident(current_user, incident_id)
 
 
-@incidents.route("/red-flags", methods=["GET"])
-@token_required
-def get_redflags(current_user):
-    """
-    api endpoint to fetch redflags
-    """
-    return incidents_controller.fetch_redflags()
-
-
-@incidents.route("/red-flags/<int:incident_id>", methods=['GET'])
-@token_required
-def get_redflag(current_user, incident_id):
-    """
-    api endpoint to fetch a redflag
-    """
-    return incidents_controller.fetch_redflag(incident_id)
-
-
-@incidents.route("/red-flags/<int:incident_id>", methods=['DELETE'])
-@token_required
-def delete_redflag(current_user, incident_id):
-    """
-    api endpoint to delete a redflag
-    """
-    if current_user['is_admin'] is True:
-        return incidents_controller.delete_redflag(incident_id)
-    return jsonify({
-        "status": 403,
-        "message": "Cannot perform this task."
-    }), 403
-
-
-@incidents.route("/interventions", methods=["GET"])
-@token_required
-def get_interventions(current_user):
-    """
-    api endpoint to fetch interventions
-    """
-    return incidents_controller.fetch_interventions()
-
-
-@incidents.route("/interventions/<int:incident_id>", methods=['GET'])
+@incidents.route("/incidents/<int:incident_id>", methods=['GET'])
 @token_required
 def get_intervention(current_user, incident_id):
     """
-    api endpoint to fetch an intervention incident
+    api endpoint to fetch an incident record
     """
-    return incidents_controller.fetch_intervention(incident_id)
+    return incidents_controller.fetch_incident(incident_id)
 
 
-@incidents.route("/interventions/<int:incident_id>", methods=['DELETE'])
-@token_required
-def delete_intervention(current_user, incident_id):
+# Admin protected routes
+# Only the admin can perform these tasks
+@incidents.route("/incidents/<int:incident_id>", methods=['DELETE'])
+@is_admin
+def delete_incident(incident_id):
     """
     api endpoint to delete an intervention incident
     """
-    if current_user['is_admin'] is True:
-        return incidents_controller.delete_intervention(incident_id)
-    return jsonify({
-        "status": 403,
-        "message": "Cannot perform this task."
-    }), 403
+    return incidents_controller.delete_incident(incident_id)

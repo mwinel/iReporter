@@ -5,8 +5,6 @@ import datetime
 from flask import request, jsonify
 from db.database import DatabaseConnection
 from api.incidents.validators import IncidentValidations
-from api.incidents.helpers import (get_redflags_by_redflag_type,
-                                   get_interventions_by_intervention_type)
 
 db = DatabaseConnection()
 incident_validations = IncidentValidations()
@@ -72,26 +70,11 @@ class IncidentsController:
             "message": "success"
         }), 200
 
-    def fetch_incidents_by_user(self, current_user, created_by, user_id):
-        """
-        returns a list of incidents by created by a user
-        """
-        created_by = current_user[user_id]
-        incidents = db.get_all_by_argument('incidents', 'created_by', created_by)
-        if incidents:
-            return jsonify(incidents=incidents), 200
-        return jsonify({
-            "status": 404,
-            "message": "No Incidents Found."
-        })
-
     def fetch_incident(self, incident_id):
         """
         returns a single incident
         """
-        incidents = db.fetch_all('incidents')
-        incident = [
-            incident for incident in incidents if incident['incident_id'] == incident_id]
+        incident = db.get_by_argument('incidents', 'incident_id', incident_id)
         if incident:
             return jsonify({
                 "status": 200,
@@ -102,17 +85,6 @@ class IncidentsController:
             "status": 404,
             "message": "Incident Not Found."
         })
-
-    def fetch_redflags(self):
-        """
-        returns a list with redflags
-        """
-        redflags = get_redflags_by_redflag_type()
-        return jsonify({
-            "status": 200,
-            "redflags": redflags,
-            "message": "success"
-        }), 200
 
     def edit_incident(self, current_user, incident_id):
         """
@@ -144,87 +116,20 @@ class IncidentsController:
             "message": "Incident was not found.",
         }), 404
 
-    def fetch_redflag(self, incident_id):
+    def delete_incident(self, incident_id):
         """
-        returns a single redflag incident
+        deletes an incident record
         """
-        redflags = get_redflags_by_redflag_type()
-        redflag = [
-            redflag for redflag in redflags if redflag['incident_id'] == incident_id]
-        if redflag:
-            return jsonify({
-                "status": 200,
-                "redflag": redflag,
-                "message": "success"
-            }), 200
-        return jsonify({
-            "status": 404,
-            "message": "Redflag Not Found."
-        })
-
-    def delete_redflag(self, incident_id):
-        """
-        deletes a redflag incident
-        """
-        redflags = get_redflags_by_redflag_type()
-        redflag = [
-            redflag for redflag in redflags if redflag['incident_id'] == incident_id]
-        if redflag:
+        incidents = db.fetch_all('incidents')
+        incident = [
+            incident for incident in incidents if incident['incident_id'] == incident_id]
+        if incident:
             db.delete_by_argument('incidents', 'incident_id', incident_id)
             return jsonify({
                 "status": 200,
-                "message": "Redflag successfully deleted."
+                "message": "Incident successfully deleted."
             }), 200
         return jsonify({
             "status": 404,
-            "message": "Redflag Not Found."
-        })
-
-    def fetch_interventions(self):
-        """
-        returns a list with intervention incidents
-        """
-        interventions = get_interventions_by_intervention_type()
-        return jsonify({
-            "status": 200,
-            "interventions": interventions,
-            "message": "success"
-        }), 200
-
-    def fetch_intervention(self, incident_id):
-        """
-        returns a single intervention incident
-        """
-        interventions = get_interventions_by_intervention_type()
-        intervention = [
-            intervention for intervention in interventions \
-            if intervention['incident_id'] == incident_id]
-        if intervention:
-            return jsonify({
-                "status": 200,
-                "intervention": intervention,
-                "message": "success"
-            }), 200
-        return jsonify({
-            "status": 404,
-            "message": "Intervention Not Found."
-        })
-
-    def delete_intervention(self, incident_id):
-        """
-        deletes an intervention incident
-        """
-        interventions = get_interventions_by_intervention_type()
-        intervention = [
-            intervention for intervention in interventions \
-            if intervention['incident_id'] == incident_id]
-        if intervention:
-            db.delete_by_argument('incidents', 'incident_id', incident_id)
-            return jsonify({
-                "status": 200,
-                "message": "Intervention successfully deleted."
-            }), 200
-        return jsonify({
-            "status": 404,
-            "message": "Intervention Not Found."
+            "message": "Incident Not Found."
         })

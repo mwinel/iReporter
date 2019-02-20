@@ -15,6 +15,7 @@ class BaseTestCase(unittest.TestCase):
         self.db = DatabaseConnection()
         self.db.create_tables()
         self.admin = {
+            "user_id": 1,
             "firstname": "paul",
             "lastname": "kasami",
             "othernames": "polk",
@@ -35,14 +36,6 @@ class BaseTestCase(unittest.TestCase):
         }
         self.incident = {
             "incident_type": "red-flag",
-            "location": "lat long cordinates",
-            "status": "draft",
-            "images": "girl-ethiopian-child-portrait-38634.jpeg",
-            "videos": "girl-ethiopian-child-portrait-38634.mkv",
-            "comment": "Alot of money has stolen since 2010."
-        }
-        self.incident2 = {
-            "incident_type": "intervention",
             "location": "lat long cordinates",
             "status": "draft",
             "images": "girl-ethiopian-child-portrait-38634.jpeg",
