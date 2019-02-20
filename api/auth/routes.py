@@ -3,7 +3,7 @@ user auth routes
 """
 from flask import Blueprint
 from api.auth.controllers import UserController
-from api.auth.helpers import token_required
+from api.auth.helpers import token_required, is_admin
 
 auth = Blueprint('auth', __name__)
 user_controller = UserController()
@@ -26,25 +26,10 @@ def login():
 
 
 @auth.route("/users", methods=['GET'])
-@token_required
-def get_users(current_user):
+@is_admin
+def get_users():
     """
     api endpoint to return users
+    only the admin can view users
     """
     return user_controller.get_users()
-
-@auth.route("/users/<int:user_id>", methods=['GET'])
-@token_required
-def get_user(current_user, user_id):
-    """
-    api endpoint to return a single user
-    """
-    return user_controller.fetch_user(user_id)
-
-@auth.route("/users/<username>", methods=['GET'])
-@token_required
-def get_user_by_username(current_user, username):
-    """
-    api endpoint to return a single user by username
-    """
-    return user_controller.fetch_user_by_username(username)

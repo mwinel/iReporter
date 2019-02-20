@@ -230,16 +230,10 @@ class TestUserAuth(BaseTestCase):
         res = self.app.post(
             'api/v2/auth/signup',
             content_type='application/json',
-            data=json.dumps(self.user)
+            data=json.dumps(self.admin)
         )
         self.assertTrue(res.status_code, 201)
-        # login user
-        response = self.app.post(
-            'api/v2/auth/login',
-            content_type='application/json',
-            data=json.dumps({"username": "more", "password": "654321"})
-        )
-        auth_token = json.loads(response.data.decode())
+        auth_token = json.loads(res.data.decode())
         rv = self.app.get(
             'api/v2/users',
             headers={'Authorization': auth_token['access_token']},
