@@ -71,6 +71,15 @@ def get_intervention(current_user, incident_id):
 @is_admin
 def delete_incident(incident_id):
     """
-    api endpoint to delete an intervention incident
+    api endpoint to delete an incident
     """
     return incidents_controller.delete_incident(incident_id)
+
+
+@incidents.route("/incidents/<int:incident_id>/status", methods=['PATCH'])
+@is_admin
+def update_incident_status(incident_id):
+    """
+    api endpoint to update an incident status
+    """
+    return incidents_controller.edit_incident_status(incident_id)

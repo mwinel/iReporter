@@ -145,3 +145,21 @@ class IncidentsController:
             "status": 404,
             "message": "Incident Not Found."
         })
+
+    def edit_incident_status(self, incident_id):
+        """
+        updates incident status
+        """
+        data = request.get_json(force=True)
+        status = data["status"]
+        incident = db.get_by_argument('incidents', 'incident_id', incident_id)
+        if incident:
+            db.update_incident_status(status, incident_id)
+            return jsonify({
+                "status": 201,
+                "message": "Successfully updated incident status."
+            }), 201
+        return jsonify({
+            "status": 404,
+            "error": "Incident not found."
+        }), 404

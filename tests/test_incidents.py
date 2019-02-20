@@ -195,6 +195,31 @@ class IncidentTestCase(BaseTestCase):
         self.assertTrue(res.status_code, 201)
         self.assertTrue(result["message"] == "Incident successfully updated.")
 
+    def test_update_an_incident_status(self):
+        """Test API can update an incident status."""
+
+        res = self.app.post(
+            'api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.admin)
+        )
+        auth_token = json.loads(res.data.decode())
+        rv = self.app.post(
+            '/api/v2/incidents',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.incident)
+        )
+        self.assertTrue(rv.status_code, 201)
+        self.incident["status"] = "under investigation"
+        res = self.app.patch(
+            '/api/v2/incidents/1/status',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.incident)
+        )
+        self.assertTrue(res.status_code, 201)
+
     def test_update_a_non_existing_incident(self):
         """Test API cannot update a non existing incident."""
 

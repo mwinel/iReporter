@@ -19,13 +19,13 @@ class DatabaseConnection:
         if os.getenv('DB_NAME') == 'test_ireporter':
             self.db_name = 'test_ireporter'
         else:
-            self.db_name = 'dm193kdvc88f2'
+            self.db_name = 'ireporter'
         pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
-            user="hzndbdowrempvn",
-            password="82df8d77dbff78d197cb153cd3aa601457cea0b1642dc716c832ea2c8cb1626f",
-            host="ec2-23-21-244-254.compute-1.amazonaws.com",
+            user="murungi",
+            password="myPassword",
+            host="localhost",
             port="5432"
         )
         self.connection.autocommit = True
@@ -120,6 +120,15 @@ class DatabaseConnection:
         )
         incident = self.cursor.fetchone()
         return incident
+
+    def update_incident_status(self, status, incident_id):
+        """
+        updates the incident status
+        """
+        self.cursor.execute(
+            """
+            UPDATE incidents SET status = '{}' WHERE incident_id = {};
+            """.format(status, incident_id))
 
     def fetch_all(self, table):
         """
