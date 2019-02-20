@@ -32,3 +32,19 @@ def get_users(current_user):
     api endpoint to return users
     """
     return user_controller.get_users()
+
+@auth.route("/users/<int:user_id>", methods=['GET'])
+@token_required
+def get_user(current_user, user_id):
+    """
+    api endpoint to return a single user
+    """
+    return user_controller.fetch_user(user_id)
+
+@auth.route("/users/<username>", methods=['GET'])
+@token_required
+def get_user_by_username(current_user, username):
+    """
+    api endpoint to return a single user by username
+    """
+    return user_controller.fetch_user_by_username(username)

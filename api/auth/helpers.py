@@ -8,6 +8,7 @@ from flask import request, jsonify
 from db.database import DatabaseConnection
 
 db = DatabaseConnection()
+SECRET_KEY = 'some-boy-just-went-mad-coding'
 
 
 def get_user(username):
@@ -50,7 +51,7 @@ def token_required(f):
         auth_token = request.headers['Authorization']
         try:
             identinty = jwt.decode(
-                auth_token, 'some-boy-just-went-mad-coding', algorithms='HS256')
+                auth_token, SECRET_KEY, algorithms='HS256')
             current_user = get_user(username=identinty['sub'])
         except jwt.ExpiredSignatureError:
             return jsonify({
@@ -63,4 +64,39 @@ def token_required(f):
                 "error": "Invalid Token. Please login again."
             }), 401
         return f(current_user, *args, **kwargs)
+    return decorated
+
+
+def is_admin(f):
+    """
+    decorator to protect admin required api endpoints
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'Authorization' not in request.headers:
+            return jsonify({
+                "status": 401,
+                "error": "Missing Authorization Header"
+            }), 401
+        auth_token = request.headers['Authorization']
+        try:
+            identinty = jwt.decode(
+                auth_token, SECRET_KEY, algorithms='HS256')
+            user = get_user(username=identinty['sub'])
+            if user['is_admin'] is False:
+                return jsonify({
+                    "status": 401,
+                    "error": "You are not authorized to perform this task."
+                }), 401
+        except jwt.ExpiredSignatureError:
+            return jsonify({
+                "status": 401,
+                "error": "Token expired. Please login again."
+            }), 401
+        except jwt.InvalidSignatureError:
+            return jsonify({
+                "status": 401,
+                "error": "Invalid Token. Please login again."
+            }), 401
+        return f(*args, **kwargs)
     return decorated
