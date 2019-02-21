@@ -13,7 +13,7 @@ incidents_controller = IncidentsController()
 @token_required
 def get_incidents(current_user):
     """
-    api endpoint to fetch incidents
+    api endpoint to fetch all incidents
     """
     return incidents_controller.fetch_incidents()
 
@@ -52,15 +52,6 @@ def update_incident(current_user, incident_id):
     api endpoint to update an incident record
     """
     return incidents_controller.edit_incident(current_user, incident_id)
-
-
-@incidents.route("/incidents/<int:incident_id>", methods=['GET'])
-@token_required
-def get_intervention(current_user, incident_id):
-    """
-    api endpoint to fetch an incident record
-    """
-    return incidents_controller.fetch_incident(incident_id)
 
 
 # Admin protected routes
