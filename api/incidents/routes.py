@@ -1,5 +1,5 @@
 """
-Redflag routes
+incidents routes
 """
 from flask import Blueprint
 from api.incidents.controllers import IncidentsController
@@ -31,8 +31,7 @@ def get_user_incidents(current_user):
 @token_required
 def post_incident(current_user):
     """
-    api endpoint to create redflag and intervention
-    incidents
+    api endpoint to create incidents
     """
     return incidents_controller.create_incident(current_user)
 
@@ -50,8 +49,7 @@ def get_incident(current_user, incident_id):
 @token_required
 def update_incident(current_user, incident_id):
     """
-    api endpoint to update a redflag and interventions
-    incident
+    api endpoint to update an incident record
     """
     return incidents_controller.edit_incident(current_user, incident_id)
 
