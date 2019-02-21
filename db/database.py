@@ -75,6 +75,15 @@ class DatabaseConnection:
         user = self.cursor.fetchone()
         return user
 
+    def update_admin_status(self, is_admin, user_id):
+        """
+        updates the user admin status
+        """
+        self.cursor.execute(
+            """
+            UPDATE users SET is_admin = '{}' WHERE user_id = {};
+            """.format(is_admin, user_id))
+
     def insert_incident_data(self, *args):
         """
         insert incidents data into table

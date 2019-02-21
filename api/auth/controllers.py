@@ -106,3 +106,21 @@ class UserController:
     def get_users(self):
         users = db.fetch_all('users')
         return jsonify(users=users), 200
+
+    def edit_admin_status(self, is_admin, user_id):
+        """
+        updates admin status
+        """
+        data = request.get_json(force=True)
+        is_admin = data["is_admin"]
+        user = db.get_by_argument('users', 'user_id', user_id)
+        if user:
+            db.update_admin_status(is_admin, user_id)
+            return jsonify({
+                "status": 201,
+                "message": "Successfully updated admin status."
+            }), 201
+        return jsonify({
+            "status": 404,
+            "error": "User not found."
+        }), 404

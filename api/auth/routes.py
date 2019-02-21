@@ -33,3 +33,12 @@ def get_users():
     only the admin can view users
     """
     return user_controller.get_users()
+
+
+@auth.route("/users/<int:user_id>/status", methods=['PATCH'])
+@is_admin
+def update_admin_status(user_id):
+    """
+    api endpoint to update an user status
+    """
+    return user_controller.edit_admin_status(is_admin, user_id)
