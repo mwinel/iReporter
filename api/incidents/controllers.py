@@ -104,27 +104,27 @@ class IncidentsController:
         updates an incident
         """
         incident = db.get_by_argument('incidents', 'incident_id', incident_id)
-        if int(incident['created_by']) != int(current_user['user_id']):
+        if incident:
+            if int(incident['created_by']) == int(current_user['user_id']):
+                data = request.get_json()
+                incident_type = data.get(
+                    'incident_type', incident['incident_type'])
+                location = data.get('location', incident['location'])
+                status = "draft"
+                images = data.get('images', incident['images'])
+                videos = data.get('videos', incident['videos'])
+                comment = data.get('comment', incident['comment'])
+                new_incident = db.update_incident(incident_type, location, status, images,
+                                                  videos, comment, incident_id)
+                return jsonify({
+                    "status": 201,
+                    "message": "Incident successfully updated.",
+                    "data": new_incident
+                }), 201
             return jsonify({
                 "status": 403,
                 "message": "You cannot edit this incident."
             }), 403
-        if incident:
-            data = request.get_json()
-            incident_type = data.get(
-                'incident_type', incident['incident_type'])
-            location = data.get('location', incident['location'])
-            status = "draft"
-            images = data.get('images', incident['images'])
-            videos = data.get('videos', incident['videos'])
-            comment = data.get('comment', incident['comment'])
-            new_incident = db.update_incident(incident_type, location, status, images,
-                                              videos, comment, incident_id)
-            return jsonify({
-                "status": 201,
-                "message": "Incident successfully updated.",
-                "data": new_incident
-            }), 201
         return jsonify({
             "status": 404,
             "message": "Incident was not found.",
