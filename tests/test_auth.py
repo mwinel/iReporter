@@ -226,13 +226,12 @@ class TestUserAuth(BaseTestCase):
     def test_get_all_users(self):
         """Test is API returns a list of users."""
 
-        # signup user
+        admin_login = {"username": "mwinel", "password": "123456"}
         res = self.app.post(
-            'api/v2/auth/signup',
+            'api/v2/auth/login',
             content_type='application/json',
-            data=json.dumps(self.admin)
+            data=json.dumps(admin_login)
         )
-        self.assertTrue(res.status_code, 201)
         auth_token = json.loads(res.data.decode())
         rv = self.app.get(
             'api/v2/users',
@@ -254,10 +253,55 @@ class TestUserAuth(BaseTestCase):
         self.assertTrue(rv.status_code, 401)
 
     def test_get_all_users_with_missing_token(self):
-        """Test is API cannit returns list of users with missing token."""
+        """Test is API cannot return a list of users with missing token."""
 
         rv = self.app.get(
             'api/v2/users',
+            headers={"": ""},
             content_type='application/json'
         )
         self.assertTrue(rv.status_code, 401)
+
+    def test_update_user_status(self):
+        """Test API can update user status."""
+
+        user_login = {"username": "mwinel", "password": "123456"}
+        login = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps(user_login)
+        )
+        auth_token = json.loads(login.data.decode())
+        rv = self.app.post(
+            '/api/v2/auth/signup',
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        self.assertTrue(rv.status_code, 201)
+        self.incident["is_admin"] = True
+        res = self.app.patch(
+            '/api/v2/users/2/status',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.incident)
+        )
+        self.assertTrue(res.status_code, 201)
+
+    def test_update_user_status_for_non_existing_user(self):
+        """Test API cannot update user status for a non exisiting user."""
+
+        user_login = {"username": "mwinel", "password": "123456"}
+        login = self.app.post(
+            'api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps(user_login)
+        )
+        auth_token = json.loads(login.data.decode())
+        self.incident["is_admin"] = True
+        res = self.app.patch(
+            '/api/v2/users/200000/status',
+            headers={'Authorization': auth_token['access_token']},
+            content_type='application/json',
+            data=json.dumps(self.incident)
+        )
+        self.assertTrue(res.status_code, 404)
