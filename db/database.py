@@ -2,7 +2,6 @@
 database class
 """
 import os
-from pprint import pprint
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -20,7 +19,6 @@ class DatabaseConnection:
             self.db_name = 'test_ireporter'
         else:
             self.db_name = 'ireporter'
-        pprint(self.db_name)
         self.connection = psycopg2.connect(
             dbname=self.db_name,
             user="murungi",
@@ -30,7 +28,6 @@ class DatabaseConnection:
         )
         self.connection.autocommit = True
         self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
-        pprint("Successfully connected to the database.")
 
     def create_tables(self):
         """
